@@ -1,0 +1,162 @@
+const {MessageEmbed, MessageAttachment} = require('discord.js');
+const {readFile, writeFile, unlink} = require('fs');
+const moment = require('moment');
+
+module.exports = async (Client, interaction) => {
+    let ticket;
+
+    switch (interaction.message.channel.type) {
+        case 'DM':
+            ticket = await Client.Ticket.findOne({ where: { ownerID: interaction.user.id }});
+            break;
+
+        default:
+            ticket = await Client.Ticket.findOne({ where: { channelID: interaction.message.channel.id }});
+            break;
+    }
+
+    if (ticket) {
+        let mainGuild = Client.guilds.cache.get(Client.settings.mainGuildID);
+        if (mainGuild) {
+            let ticketChannel = await mainGuild.channels.cache.get(ticket.channelID);
+            if (ticketChannel) {
+                ticketChannel.send({
+                    embeds: [
+                        new MessageEmbed()
+                            .setColor('9bd2d2')
+                            .setDescription(`🔒 | Ce salon d\'écoute a été fermé par ${(interaction.message.channel.type === 'DM') ? 'l\'utilisateur' : 'le bénévole écoutant'}, plus aucun message ne sera transmit. Il peut maintenant être stocké en archive.`)
+                    ]
+                })
+
+                let user = await Client.users.fetch(ticket.ownerID);
+                if (user) {
+                    user.send({
+                        embeds: [
+                            new MessageEmbed()
+                                .setColor('9bd2d2')
+                                .setDescription(`🍀 | Votre salon d\'écoute a été fermé${(interaction.message.channel.type === 'DM') ? '' : ' par le bénévole écoutant'}. En cas de besoin, n\'hésitez pas a en réouvrir un !`)
+                        ]
+                    })
+                }
+
+                interaction.reply({ embeds: [
+                        new MessageEmbed()
+                            .setColor('9bd2d2')
+                            .setDescription('✅ | L\'écoute a bien été fermée !')
+                    ], ephemeral: true});
+
+                readFile('./content/transcript.html', async (err, data) => {
+                    if (err) throw err;
+
+                    let htmlToAdd = [];
+
+                    let msg = '<div class="message">\n' +
+                        '  <div class="pdp">\n' +
+                        '    <img src="{{PDP}}">\n' +
+                        '  </div>\n' +
+                        '  <div class="text">\n' +
+                        '    <div class="username">\n' +
+                        '      <h1>{{USERNAME}}</h1>\n' +
+                        '    </div>\n' +
+                        '\n' +
+                        '    <div class="time">\n' +
+                        '      <h1>{{TIME}}</h1>\n' +
+                        '    </div>\n' +
+                        '\n' +
+                        '    <div class="content">\n' +
+                        '      <h1>{{MSGCONTENT}}</h1>\n' +
+                        '    </div>\n' +
+                        '  </div>\n' +
+                        '</div>';
+
+                    let userMsg = '<div class="message user">\n' +
+                        '  <div class="pdp">\n' +
+                        '    <img src="https://media.discordapp.net/attachments/757897064754708560/883734125985529866/default-profile-picture-clipart-3.jpg">\n' +
+                        '  </div>\n' +
+                        '\n' +
+                        '  <div class="text">\n' +
+                        '    <div class="username">\n' +
+                        '      <h1></h1>\n' +
+                        '    </div>\n' +
+                        '\n' +
+                        '    <div class="time">\n' +
+                        '      <h1>{{TIME}}</h1>\n' +
+                        '    </div>\n' +
+                        '\n' +
+                        '    <div class="content">\n' +
+                        '      <h1>{{CONTENT}}</h1>\n' +
+                        '    </div>\n' +
+                        '  </div>\n' +
+                        '</div>';
+
+                    let messages = await ticketChannel.messages.fetch();
+                    let messagesArray = [];
+
+                    messages.forEach(message => {
+                        messagesArray.push(message);
+                    });
+
+                    for (let i = messagesArray.length - 2; i > 0; i--) {
+                        let message = messagesArray[i]
+                        if (message.author.id === Client.user.id) {
+                            htmlToAdd.push(userMsg
+                                .replace('{{TIME}}', moment(message.createdAt).format('DD/MM/YYYY - HH:mm'))
+                                .replace('{{CONTENT}}', message.embeds[0].description)
+                            );
+                        } else {
+                            htmlToAdd.push(msg
+                                .replace('{{PDP}}', message.author.displayAvatarURL({ dynamic: false }))
+                                .replace('{{USERNAME}}', message.author.username)
+                                .replace('{{TIME}}', moment(message.createdAt).format('DD/MM/YYYY - HH:mm'))
+                                .replace('{{MSGCONTENT}}', message.content)
+                            );
+                        }
+                    }
+
+                    let newHTML = data.toString('utf8')
+                        .replace('{{CONTENT}}', htmlToAdd.join('\n\n'))
+                        .replace('{{ID}}', ticket.ticketID);
+
+                    writeFile(`./tempSaves/transcript-${ticket.ticketID}.html`, newHTML, (err) => {
+                        if (err) throw err;
+                    });
+
+                    let fileAttachment = new MessageAttachment(`./tempSaves/transcript-${ticket.ticketID}.html`, `transcript-${ticket.ticketID}.html`);
+                    let mainGuild = Client.guilds.cache.get(Client.settings.mainGuildID);
+                    if (mainGuild) {
+                        let transcriptChannel = await mainGuild.channels.fetch(Client.settings.transcriptChannelID);
+                        if (transcriptChannel) {
+                            try {
+                                await transcriptChannel.send({ files: [fileAttachment]});
+                            } catch (e) {
+                                if (e) {
+                                    console.log('err');
+                                    throw e;
+                                } else {
+                                    console.log('no err')
+                                    ticketChannel.delete();
+                                }
+                            }
+                        }
+                    }
+
+                    try {
+                        unlink(`./tempSaves/transcript-${ticket.ticketID}.html`, (err) => {
+                            if (err) throw err;
+                        });
+                    } catch (e) {
+                        if (e) throw e
+                    }
+
+                    interaction.channel.delete();
+                });
+            }
+        }
+
+        let historic = await Client.Historic.create({
+            ticketID: ticket.ticketID,
+        })
+
+        await ticket.destroy()
+    }
+}

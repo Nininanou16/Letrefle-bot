@@ -1,0 +1,19 @@
+{
+  "secret_token": "",
+  "mainGuildID": "",
+  "ticketCategoryID": "",
+  "dashboard": {
+    "channelID": "",
+    "messageID": ""
+  },
+  "ticketOpening": {
+    "channel": "",
+    "message": ""
+  },
+  "transcriptChannelID": "",
+  "available": {
+    "channelID": "",
+    "messageID": ""
+  },
+  "setupMode": true
+}
