@@ -15,8 +15,6 @@ module.exports = async (Client, interaction, Ticket) => {
                 len--;
                 if (!str) str = '0';
                 else str = '0'+str
-                console.log('+0')
-                console.log(str)
 
                 if (len <= 0) return str;
                 return genMissing(len, str);
@@ -42,7 +40,6 @@ module.exports = async (Client, interaction, Ticket) => {
 
         // generate unique ID
         let id = await genID();
-        console.log(id);
 
         let row = new MessageActionRow()
             .addComponents(
@@ -55,7 +52,7 @@ module.exports = async (Client, interaction, Ticket) => {
 
         try {
             // send DM confirmation
-            interaction.user.send({ embeds: [
+            await interaction.user.send({ embeds: [
                     new MessageEmbed()
                         .setColor('9bd2d2')
                         .setThumbnail('https://i.imgur.com/haHDKhq.png')

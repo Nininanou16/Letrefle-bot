@@ -69,11 +69,8 @@ module.exports = {
         let i = 0;
 
         await client.reOpen.findAll().then(olds => {
-            console.log(olds)
             olds.forEach(async old => {
                 i++;
-                console.log(i);
-                console.log(old.timestamp);
                 await old.destroy();
             })
         });
@@ -130,8 +127,6 @@ module.exports = {
             }
         }
 
-        console.log(timestamp)
-
         setTimeout(() => {
             client.functions.open(client)
         }, timestamp-Date.now());
@@ -181,6 +176,48 @@ module.exports = {
                                 .setDescription(`Bénévoles disponibles :\n\n${text}`)
                         ], components: [row], content: null
                     })
+                }
+            }
+        }
+    },
+
+    updateChannelsMessage: async (Client) => {
+        let guild = await Client.guilds.fetch(Client.settings.mainGuildID);
+        if (guild) {
+            let channel = await guild.channels.fetch(Client.settings.channels.channelID);
+            if (channel) {
+                let message = await channel.messages.fetch(Client.settings.channels.messageID);
+                if (message) {
+                    let opened = await Client.open.findAll()
+                    opened = opened[0];
+                    if (!opened) opened = {
+                        open: true
+                    }
+
+                    let row = new MessageActionRow()
+                        .addComponents(
+                            new MessageButton()
+                                .setCustomId('OpenChannels')
+                                .setStyle('SUCCESS')
+                                .setEmoji('🔓')
+                                .setLabel('Ouvrir les salons')
+                                .setDisabled(opened.open),
+
+                            new MessageButton()
+                                .setCustomId('CloseChannels')
+                                .setStyle('SECONDARY')
+                                .setEmoji('🔒')
+                                .setLabel('Fermer les salons')
+                                .setDisabled(!opened.open)
+                        );
+
+                    message.edit({
+                        embeds: [
+                            new MessageEmbed()
+                                .setColor('9bd2d2')
+                                .setDescription(opened.open ? '🔓 | Salons ouverts' : '🔒 | Salons fermés')
+                        ], components: [row]
+                    });
                 }
             }
         }

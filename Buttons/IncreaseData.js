@@ -9,9 +9,6 @@ module.exports = async (Client, interaction) => {
             let numValue = parseInt(value)
             switch (data) {
                 case 'day':
-                    console.log('day')
-                    console.log(months[parseInt(Client.dateSelector.data.month.value)-1])
-                    console.log(months)
                     if (numValue >= months[parseInt(Client.dateSelector.data.month.value)-1]) {
                         Client.dateSelector.data[data].value = '01';
 

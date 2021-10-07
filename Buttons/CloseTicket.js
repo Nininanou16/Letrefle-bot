@@ -45,7 +45,7 @@ module.exports = async (Client, interaction) => {
                             .setDescription('✅ | L\'écoute a bien été fermée !')
                     ], ephemeral: true});
 
-                readFile('./content/transcript.html', async (err, data) => {
+                await readFile('./content/transcript.html', async (err, data) => {
                     if (err) throw err;
 
                     let htmlToAdd = [];
@@ -89,12 +89,21 @@ module.exports = async (Client, interaction) => {
                         '  </div>\n' +
                         '</div>';
 
-                    let messages = await ticketChannel.messages.fetch();
                     let messagesArray = [];
+                    await fetchMessages();
 
-                    messages.forEach(message => {
-                        messagesArray.push(message);
-                    });
+                    async function fetchMessages(before) {
+                        let messages;
+                        if (before) messages = await ticketChannel.messages.fetch({ limit: 100, before: before})
+                        else messages = await ticketChannel.messages.fetch({ limit: 100 });
+
+                        messages.forEach(message => {
+                            messagesArray.push(message);
+                        });
+
+                        if (messages.size === 100) return fetchMessages(messagesArray[messagesArray.length-1].id);
+                        return null;
+                    }
 
                     for (let i = messagesArray.length - 2; i > 0; i--) {
                         let message = messagesArray[i]
@@ -130,10 +139,8 @@ module.exports = async (Client, interaction) => {
                                 await transcriptChannel.send({ files: [fileAttachment]});
                             } catch (e) {
                                 if (e) {
-                                    console.log('err');
                                     throw e;
                                 } else {
-                                    console.log('no err')
                                     ticketChannel.delete();
                                 }
                             }
@@ -148,7 +155,7 @@ module.exports = async (Client, interaction) => {
                         if (e) throw e
                     }
 
-                    interaction.channel.delete();
+                    ticketChannel.delete();
                 });
             }
         }

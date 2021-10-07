@@ -13,8 +13,6 @@ module.exports = async (Client, interaction) => {
         Client.dateSelector.data[data].selected = i === toSelect;
     });
 
-    console.log(Client.dateSelector.data)
-
     let text = Client.dateSelector.genText();
     interaction.update({
         embeds: [

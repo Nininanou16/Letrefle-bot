@@ -17,7 +17,6 @@ module.exports = async (Client, interaction) => {
 
         let tickets = await Client.Ticket.findAll();
         for (let i in Object.keys(tickets)) {
-            console.log(tickets[i])
             let guild = Client.guilds.cache.get(Client.settings.mainGuildID);
             if (guild) {
                 let channel = await guild.channels.fetch(tickets[i].channelID);

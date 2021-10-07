@@ -64,6 +64,10 @@ Client.reOpen = Client.db.define('reopen', {
 // BE database
 Client.available = Client.db.define('availlable', {
     userID: Sequelize.TEXT,
-})
+});
+
+Client.open = Client.db.define('open', {
+    open: Sequelize.BOOLEAN,
+});
 
 Client.login(Client.settings.secret_token).then(() => {});

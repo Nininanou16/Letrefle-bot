@@ -3,32 +3,33 @@ const {MessageActionRow, MessageButton, MessageEmbed} = require('discord.js')
 module.exports = async (Client, message) => {
     if (message.author.bot) return;
 
-    if (message.mentions.users.first().id === Client.user.id && Client.settings.setupMode) {
+    if (Client.settings.setupMode && message.mentions.users.first().id === Client.user.id) {
         let msg = await message.channel.send('Configuration...');
         msg.edit({
             embeds: [
                 new MessageEmbed()
                     .setColor('9bd2d2')
                     .setDescription(`ChannelID: ${message.channel.id}\nMessageID: ${msg.id}`)
-            ]
+            ], content: null
         });
     }
-    // if (message.content === 'ticket') {
-    //     let row = new MessageActionRow()
-    //         .addComponents(
-    //             new MessageButton()
-    //                 .setCustomId('OpenTicket')
-    //                 .setLabel('Ouvrir une écoute')
-    //                 .setEmoji('👋')
-    //                 .setStyle('SUCCESS')
-    //         );
-    //
-    //     let embed = new MessageEmbed()
-    //         .setColor('9bd2d2')
-    //         .setDescription('[ticket open message]');
-    //
-    //     message.channel.send({ embeds: [embed], components: [row]});
-    // }
+
+    if (message.content === 'ticket') {
+        let row = new MessageActionRow()
+            .addComponents(
+                new MessageButton()
+                    .setCustomId('OpenTicket')
+                    .setLabel('Ouvrir une écoute')
+                    .setEmoji('👋')
+                    .setStyle('SUCCESS')
+            );
+
+        let embed = new MessageEmbed()
+            .setColor('9bd2d2')
+            .setDescription('[ticket open message]');
+
+        message.channel.send({ embeds: [embed], components: [row]});
+    }
 
     // handle DM messages redirection
     if (message.channel.type === 'DM') {
@@ -47,7 +48,6 @@ module.exports = async (Client, message) => {
 
                     if (message.attachments.size >= 1) {
                         message.attachments.forEach(attachment => {
-                            console.log(attachment.name.endsWith('.gif'))
                             if (attachment.name.endsWith('.jpg') ||
                                 attachment.name.endsWith('.jpeg') ||
                                 attachment.name.endsWith('.png') ||
@@ -55,12 +55,23 @@ module.exports = async (Client, message) => {
                                 embed.setImage(attachment.url);
                             }
                         })
-                    };
+                    }
+
+                    if (message.reference) {
+                        let replyMsg = await message.channel.messages.fetch(message.reference.messageId);
+                        if (replyMsg) {
+                            let content = replyMsg.embeds[0].description;
+                            let msgToReply = ticketChannel.messages.cache.find(msg => msg.content === content);
+                            if (msgToReply) {
+                                return msgToReply.reply({ embeds: [ embed ]});
+                            }
+                        }
+                    }
 
                     ticketChannel.send({ embeds: [ embed ]});
-                } else console.log('no ticket')
-            } else console.log('no guild')
-        } else console.log('no ticket')
+                }
+            }
+        }
     }
 
     // handle server channel message redirection
@@ -77,7 +88,6 @@ module.exports = async (Client, message) => {
 
             if (message.attachments.size >= 1) {
                 message.attachments.forEach(attachment => {
-                    console.log(attachment.name.endsWith('.gif'))
                     if (attachment.name.endsWith('.jpg') ||
                     attachment.name.endsWith('.jpeg') ||
                     attachment.name.endsWith('.png') ||
@@ -85,7 +95,18 @@ module.exports = async (Client, message) => {
                         embed.setImage(attachment.url);
                     }
                 })
-            };
+            }
+
+            if (message.reference) {
+                let replyMsg = await message.channel.messages.fetch(message.reference.messageId);
+                if (replyMsg) {
+                    let content = replyMsg.embeds[0].description;
+                    let msgToReply = user.dmChannel.messages.cache.find(msg => msg.content === content);
+                    if (msgToReply) {
+                        return msgToReply.reply({ embeds: [ embed ]});
+                    }
+                }
+            }
 
             user.send({ embeds: [ embed ]});
         }

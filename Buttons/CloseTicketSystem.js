@@ -113,5 +113,13 @@ module.exports = async (Client, interaction) => {
                     ▶️ | ${Client.dateSelector.genText()}`)
             ], components: [topRow, bottomRow]
         });
+
+        let available = await Client.available.findAll();
+
+        for (let i in Object.keys(available)) {
+            await available[i].destroy();
+        }
+
+        Client.functions.updateAvailable(Client)
     }
 }

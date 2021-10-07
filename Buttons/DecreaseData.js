@@ -1,18 +1,9 @@
 const {MessageEmbed} = require('discord.js');
 
 module.exports = async (Client, interaction) => {
-    // for (let i of Client.dateSelector.data) {
-    //     console.log(i);
-    //     if (i.selected) {
-    //         i.value = (parseInt(i.value)+1).toString();
-    //     }
-    // }
-
     let months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
     Object.keys(Client.dateSelector.data).forEach(data => {
-        // console.log(data);
-        // console.log(Client.dateSelector.data[data]);
         if (Client.dateSelector.data[data].selected) {
             let value = Client.dateSelector.data[data].value;
             let numValue = parseInt(value)

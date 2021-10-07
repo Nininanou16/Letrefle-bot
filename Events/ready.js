@@ -5,6 +5,7 @@ module.exports = async (Client) => {
     await Client.Historic.sync();
     await Client.reOpen.sync();
     await Client.available.sync();
+    await Client.open.sync();
 
     console.log(('─────────────────────────────────\n' +
         '────────▄███▄───────▄███▄────────\n' +
@@ -34,7 +35,8 @@ module.exports = async (Client) => {
         '──────────────────███────────────\n' +
         '───────────────────███───────────').green);
 
-    Client.functions.updateAvailable(Client)
+    Client.functions.updateAvailable(Client);
+    Client.functions.updateChannelsMessage(Client);
 
     let mainGuild = Client.guilds.cache.get(Client.settings.mainGuildID);
     if (mainGuild) {
@@ -54,8 +56,6 @@ module.exports = async (Client) => {
                 reopen.every(time => {
                     i++
                     if ((time.timestamp) > timestamp) timestamp = time.timestamp
-                    console.log(i);
-                    console.log(time.timestamp);
                 })
             }
 

@@ -15,5 +15,14 @@
     "channelID": "",
     "messageID": ""
   },
-  "setupMode": true
+  "channels": {
+    "channelID": "",
+    "messageID": ""
+  },
+  "setupMode": false,
+  "toClose": [
+    "",
+    ""
+  ],
+  "toCloseRole": ""
 }
