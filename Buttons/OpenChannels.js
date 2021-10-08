@@ -1,3 +1,5 @@
+const {MessageEmbed} = require('discord.js')
+
 module.exports = async (Client, interaction) => {
     let guild = await Client.guilds.fetch(Client.settings.mainGuildID);
     if (guild) {
@@ -13,7 +15,7 @@ module.exports = async (Client, interaction) => {
         });
 
         for (let i in Client.settings.toClose) {
-            let channel = await guild.channels.fetch(i);
+            let channel = await guild.channels.fetch(Client.settings.toClose[i]);
             if (channel) {
                 let role = await guild.roles.fetch(Client.settings.toCloseRole);
                 if (role) {
@@ -33,6 +35,19 @@ module.exports = async (Client, interaction) => {
                 }
 
             }
+        }
+
+        let mainChannel = await guild.channels.fetch(Client.settings.toCloseMessageChannel);
+        if (mainChannel) {
+            mainChannel.send({
+                embeds: [
+                    new MessageEmbed()
+                        .setColor('9bd2d2')
+                        .setDescription('<:onn:895691557817180191>  __**Bonjour à toutes et à tous, les canaux vocaux et textuels sont ouvert**__.  <:onn:895691557817180191>\n' +
+                            ':sunny: *Nous comptons sur vous pour avoir des échanges et des propos corrects.* :sunny:')
+                        .setImage('https://cdn.discordapp.com/attachments/718248830428119121/895901124404584488/Le_petit_bonjour_du_matin.png')
+                ]
+            })
         }
 
         Client.functions.updateChannelsMessage(Client);

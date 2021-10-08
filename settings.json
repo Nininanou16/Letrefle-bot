@@ -4,7 +4,8 @@
   "ticketCategoryID": "",
   "dashboard": {
     "channelID": "",
-    "messageID": ""
+    "messageID": "",
+    "default": "open"
   },
   "ticketOpening": {
     "channel": "",
@@ -21,8 +22,9 @@
   },
   "setupMode": false,
   "toClose": [
-    "",
     ""
   ],
-  "toCloseRole": ""
+  "toCloseRole": "",
+  "toCloseMessageChannel": "",
+  "toCloseMessageMentionRole": ""
 }
