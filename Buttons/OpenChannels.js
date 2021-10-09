@@ -14,26 +14,26 @@ module.exports = async (Client, interaction) => {
             open: true
         });
 
-        for (let i in Client.settings.toClose) {
-            let channel = await guild.channels.fetch(Client.settings.toClose[i]);
-            if (channel) {
-                let role = await guild.roles.fetch(Client.settings.toCloseRole);
-                if (role) {
-                    switch (channel.type) {
-                        case 'GUILD_TEXT':
-                            channel.permissionOverwrites.create(guild.id, {
-                                SEND_MESSAGES: true
-                            });
-                            break;
+        for (let i of Object.keys(Client.settings.toClose)) {
+            let role = await guild.roles.fetch(i);
+            if (role) {
+                for (let id of Client.settings.toClose[i]) {
+                    let channel = await guild.channels.fetch(id);
+                    if (channel) {
+                        switch (channel.type) {
+                            case 'GUILD_TEXT':
+                                channel.permissionOverwrites.edit(role, {
+                                    SEND_MESSAGES: true
+                                });
+                                break;
 
-                        case 'GUILD_VOICE':
-                            channel.permissionOverwrites.create(guild.id, {
-                                CONNECT: true
-                            });
-                            break;
+                            case 'GUILD_VOICE':
+                                channel.permissionOverwrites.edit(role, {
+                                    CONNECT: true
+                                })
+                        }
                     }
                 }
-
             }
         }
 
