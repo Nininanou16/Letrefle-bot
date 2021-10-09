@@ -1,0 +1,36 @@
+{
+  "secret_token": "",
+  "mainGuildID": "",
+  "ticketCategoryID": "",
+  "dashboard": {
+    "channelID": "",
+    "messageID": "",
+    "default": "open"
+  },
+  "ticketOpening": {
+    "channel": "",
+    "message": ""
+  },
+  "transcriptChannelID": "",
+  "available": {
+    "channelID": "",
+    "messageID": ""
+  },
+  "channels": {
+    "channelID": "",
+    "messageID": ""
+  },
+  "setupMode": false,
+  "toClose": {
+    "roleID1": [
+      "channelID1",
+      "channelID2"
+    ],
+    "roleID2": [
+      "channelID"
+    ]
+  },
+  "toCloseRole": "",
+  "toCloseMessageChannel": "",
+  "toCloseMessageMentionRole": ""
+}
