@@ -2,7 +2,7 @@
 const Discord = require('discord.js');
 const Sequelize = require('sequelize');
 const fs = require('fs');
-const Client = new Discord.Client({ intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_TYPING', 'DIRECT_MESSAGES', 'DIRECT_MESSAGE_TYPING']});
+const Client = new Discord.Client({ intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_TYPING', 'GUILD_MESSAGE_REACTIONS', 'DIRECT_MESSAGES', 'DIRECT_MESSAGE_TYPING', 'DIRECT_MESSAGE_REACTIONS']});
 
 // Declaring variables
 Client.settings = require('./settings.json');
