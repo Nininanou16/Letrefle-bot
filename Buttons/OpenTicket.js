@@ -56,7 +56,7 @@ module.exports = async (Client, interaction, Ticket) => {
                     new MessageEmbed()
                         .setColor('9bd2d2')
                         .setThumbnail('https://i.imgur.com/haHDKhq.png')
-                        .setDescription('👋 | Bonsoir et bienvenue sur Le Trèfle 2.0\nTa demande d\'écoute a bien été prise en compte. Un bénévole écoutant te répondra sous 20 minutes, passé ce délai, nosu t\'invitons à contacter un autre support d\'écoute disponible dans <#718250345951658064>.')
+                        .setDescription('👋 | Bonsoir et bienvenue sur Le Trèfle 2.0\nTa demande d\'écoute a bien été prise en compte. Un bénévole écoutant te répondra sous 20 minutes, passé ce délai, nous t\'invitons à contacter un autre support d\'écoute disponible dans <#718250345951658064>.')
                         .setFooter(`Pour toute réclamation, veuillez fournir l'identifiant unique : ${id}, correspondant à votre écoute.`)
                 ], components: [row]});
         } catch (e) {
