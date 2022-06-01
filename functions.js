@@ -161,7 +161,7 @@ module.exports = {
             interaction.reply({ embeds: [
                 new MessageEmbed()
                     .setColor('9bd2d2')
-                    .setDescription('✅ | La permanence a bien été fermée !')
+                    .setDescription('✅ | La permanence à bien été fermée !')
                 ], ephemeral: true})
         }
     },
