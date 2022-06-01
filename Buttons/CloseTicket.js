@@ -24,7 +24,7 @@ module.exports = async (Client, interaction) => {
                     embeds: [
                         new MessageEmbed()
                             .setColor('9bd2d2')
-                            .setDescription(`🔒 | Ce salon d\'écoute a été fermé par ${(interaction.message.channel.type === 'DM') ? 'l\'utilisateur' : 'le bénévole écoutant'}, plus aucun message ne sera transmit. Il peut maintenant être stocké en archive.`)
+                            .setDescription(`🔒 | Ce salon d\'écoute a été fermé par ${(interaction.message.channel.type === 'DM') ? 'l\'utilisateur' : 'le bénévole écoutant'}, plus aucun message ne sera transmit. Il sera supprimé automatiquement sous 30 secondes.`)
                     ]
                 })
 
@@ -126,7 +126,7 @@ module.exports = async (Client, interaction) => {
                         .replace('{{CONTENT}}', htmlToAdd.join('\n\n'))
                         .replace('{{ID}}', ticket.ticketID);
 
-                    writeFile(`./tempSaves/transcript-${ticket.ticketID}.html`, newHTML, (err) => {
+                    await writeFile(`./tempSaves/transcript-${ticket.ticketID}.html`, newHTML, (err) => {
                         if (err) throw err;
                     });
 
@@ -155,15 +155,49 @@ module.exports = async (Client, interaction) => {
                         if (e) throw e
                     }
 
-                    ticketChannel.delete();
+                    setTimeout(() => {
+                        ticketChannel.delete();
+                    }, 5000);
                 });
             }
         }
 
+        await ticket.destroy()
+
+        let occupied = {};
+        if (typeof ticket.attributed === 'string') ticket.attributed = JSON.parse(ticket.attributed);
+        if (ticket.attributed.length > 0) {
+            for (let user of ticket.attributed) {
+                occupied[user] = false
+            }
+            let tickets = await Client.Ticket.findAll();
+            for (let ticket of Object.values(tickets)) {
+                let assigned = ticket.attributed;
+                for (let user of Object.keys(occupied)) {
+                    if (assigned.includes(user)) {
+                        occupied[user] = true;
+                    }
+                }
+            }
+
+            for (let user of Object.keys(occupied)) {
+                console.log(user)
+                if (!occupied[user]) {
+                    let userDB = await Client.available.findOne({ where: { userID: user }});
+                    if (userDB) {
+                        await userDB.update({
+                            userID: user,
+                            occupied: false,
+                        });
+                    }
+                }
+            }
+        }
+
+        Client.functions.updateAvailable(Client);
+
         let historic = await Client.Historic.create({
             ticketID: ticket.ticketID,
-        })
-
-        await ticket.destroy()
+        });
     }
 }

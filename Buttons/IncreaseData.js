@@ -7,32 +7,46 @@ module.exports = async (Client, interaction) => {
         if (Client.dateSelector.data[data].selected) {
             let value = Client.dateSelector.data[data].value;
             let numValue = parseInt(value)
+            console.log(numValue >= months[parseInt(Client.dateSelector.data.month.value)-1])
+            let loopback = false;
             switch (data) {
                 case 'day':
                     if (numValue >= months[parseInt(Client.dateSelector.data.month.value)-1]) {
                         Client.dateSelector.data[data].value = '01';
-
+                        loopback = true
                     }
                     break;
 
                 case 'month':
-                    if (numValue >= 12) return Client.dateSelector.data[data].value = '01';
+                    if (numValue >= 12) {
+                        Client.dateSelector.data[data].value = '01';
+                        loopback = true
+                    }
                     break;
 
                 case 'hour':
-                    if (numValue >= 23) return Client.dateSelector.data[data].value = '00';
+                    if (numValue >= 23) {
+                        Client.dateSelector.data[data].value = '00';
+                        loopback = true
+                    }
                     break;
 
                 case 'minute':
-                    if (numValue >= 55) return Client.dateSelector.data[data].value = '00';
-            }
-            if (data === 'minute') value = (parseInt(value)+5).toString();
-            else value = (parseInt(value)+1).toString();
-            if (value.length < 2) {
-                value = `0${value}`;
+                    if (numValue >= 55) {
+                        Client.dateSelector.data[data].value = '00';
+                        loopback = true
+                    }
             }
 
-            Client.dateSelector.data[data].value = value;
+            if (!loopback) {
+                if (data === 'minute') value = (parseInt(value)+5).toString();
+                else value = (parseInt(value)+1).toString();
+                if (value.length < 2) {
+                    value = `0${value}`;
+                }
+
+                Client.dateSelector.data[data].value = value;
+            }
         }
     });
 

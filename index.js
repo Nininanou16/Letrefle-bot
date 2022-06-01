@@ -2,7 +2,7 @@
 const Discord = require('discord.js');
 const Sequelize = require('sequelize');
 const fs = require('fs');
-const Client = new Discord.Client({ intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_TYPING', 'GUILD_MESSAGE_REACTIONS', 'DIRECT_MESSAGES', 'DIRECT_MESSAGE_TYPING', 'DIRECT_MESSAGE_REACTIONS']});
+const Client = new Discord.Client({ intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_TYPING', 'GUILD_MESSAGE_REACTIONS', 'GUILD_VOICE_STATES', 'DIRECT_MESSAGES', 'DIRECT_MESSAGE_TYPING', 'DIRECT_MESSAGE_REACTIONS'], partials: ['CHANNEL']});
 
 // Declaring variables
 Client.settings = require('./settings.json');
@@ -18,6 +18,7 @@ Client.db = new Sequelize({
 // Init collections
 Client.commands = new Discord.Collection();
 Client.buttons = new Discord.Collection();
+Client.menus = new Discord.Collection();
 
 fs.readdir('./Events', (err, files) => {
     if (err) throw err
@@ -32,6 +33,21 @@ fs.readdir('./Events', (err, files) => {
     });
 });
 
+fs.readdir('./Commands', (err, files) => {
+    if (err) throw err
+
+    files.forEach(file => {
+        if (file.endsWith('.js')) {
+            let name = file.split('.')[0];
+
+            let command = require(`./Commands/${file}`);
+            command.name = name.toLowerCase()
+
+            Client.commands.set(command.name, command);
+        }
+    })
+});
+
 fs.readdir('./Buttons', (err, files) => {
     if (err) throw err
 
@@ -42,13 +58,32 @@ fs.readdir('./Buttons', (err, files) => {
            Client.buttons.set(name, require(`./Buttons/${file}`));
         }
     })
-})
+});
+
+fs.readdir('./SelectMenus', (err, files) => {
+    if (err) throw err
+
+    files.forEach(file => {
+        if (file.endsWith('.js')) {
+            let name = file.split('.')[0];
+
+            Client.menus.set(name, require(`./SelectMenus/${file}`));
+        }
+    })
+});
+
+Client.Report = Client.db.define('report', {
+    userID: Sequelize.TEXT,
+    reason: Sequelize.TEXT,
+    timestamp: Sequelize.NUMBER,
+});
 
 // Initiating ticket DB model
 Client.Ticket = Client.db.define('ticket', {
     ticketID: Sequelize.TEXT,
     ownerID: Sequelize.TEXT,
     channelID: Sequelize.TEXT,
+    attributed: Sequelize.JSON,
 });
 
 // Initiating historic ticket DB model
@@ -62,8 +97,9 @@ Client.reOpen = Client.db.define('reopen', {
 });
 
 // BE database
-Client.available = Client.db.define('availlable', {
+Client.available = Client.db.define('available', {
     userID: Sequelize.TEXT,
+    occupied: Sequelize.BOOLEAN,
 });
 
 Client.open = Client.db.define('open', {

@@ -1,4 +1,4 @@
-const {MessageActionRow, MessageButton, MessageEmbed, Permissions} = require('discord.js');
+const {MessageActionRow, MessageButton, MessageEmbed, MessageSelectMenu, Permissions} = require('discord.js');
 
 module.exports = async (Client, interaction, Ticket) => {
 
@@ -93,39 +93,68 @@ module.exports = async (Client, interaction, Ticket) => {
             VIEW_CHANNEL: false
         });
 
-        let text = '';
-
-        let users = await Client.available.findAll();
-        for (let i in Object.keys(users)) {
-            text += `<@${users[i].userID}>\n`
-
-            let user = await Client.users.fetch(users[i].userID);
-
-            await ticketChannel.permissionOverwrites.create(user, {
-                VIEW_CHANNEL: true
-            })
-        }
+        await ticketChannel.permissionOverwrites.create(ticketChannel.guild.roles.cache.get('908002560311455744'), { // TODO: replace role by parameter in config file
+            VIEW_CHANNEL: true
+        })
 
         let ticket = await Client.Ticket.create({
             ticketID: id,
             ownerID: interaction.user.id,
             channelID: ticketChannel.id,
+            attributed: [],
         });
-
-        if (text.length < 1) text = null
 
         interaction.reply({ embeds: [
                 new MessageEmbed()
                     .setColor('GREEN')
-                    .setDescription('✅ | Votre demande d\'écoute a bien été prise en compte, veuillez continuer par messages privés.')
+                    .setDescription('✅ | Votre demande d\'écoute à bien été prise en compte, veuillez continuer par messages privés.')
             ], ephemeral: true});
 
-        // send channel msg
-        ticketChannel.send({ embeds: [
+        let available = await Client.available.findAll({ where: { occupied: false }});
+        let options = [];
+
+        for (let i of Object.values(available)) {
+            let user = await Client.users.fetch(i.userID);
+            if (user) {
+                options.push({
+                    label: user.username,
+                    value: i.userID
+                });
+            }
+        }
+
+        if (options.length < 1) {
+            interaction.user.send({ embeds: [
                 new MessageEmbed()
-                    .setColor('9bd2d2')
-                    .setDescription('🍀 | Nouvelle écoute. Tout message envoyé dans ce salon sera transmi à l\'utilisateur anonyme et inversement.')
-            ], components: [row], content: text
-        });
+                    .setColor('d36515')
+                    .setDescription(':warning: | Tous les bénévoles sont actuellement en écoute. Vous serez recontacté dès que possible')
+                ]
+            });
+
+            ticketChannel.send({ embeds: [
+                    new MessageEmbed()
+                        .setColor('9bd2d2')
+                        .setDescription(':warning: | Tous les bénévoles sont actuellement occupés. Merci d\'utiliser la commande `/assigner` pour assigner un nouveau bénévole écoutant.')
+                ]
+            })
+        } else {
+            let attributeRow = new MessageActionRow()
+                .addComponents(
+                    new MessageSelectMenu()
+                        .setCustomId('addAvailable')
+                        .setPlaceholder('Ajouter un bénévole')
+                        // .setMinValues(1)
+                        // .setMaxValues(25)
+                        .addOptions(options)
+                )
+
+            // send channel msg
+            ticketChannel.send({ embeds: [
+                    new MessageEmbed()
+                        .setColor('9bd2d2')
+                        .setDescription('🍀 | Nouvelle demande d\'écoute. Veuillez attribuer un bénévole écoutant.')
+                ], components: [attributeRow]
+            });
+        }
     }
 }

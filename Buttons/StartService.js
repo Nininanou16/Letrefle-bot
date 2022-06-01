@@ -13,7 +13,7 @@ module.exports = async (Client, interaction) => {
             ], ephemeral: true
         });
     } else {
-        await Client.available.create({ userID: user.id });
+        await Client.available.create({ userID: user.id, occupied: false });
         interaction.reply({
             embeds: [
                 new MessageEmbed()

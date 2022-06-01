@@ -1,5 +1,10 @@
 module.exports = async (Client, reaction, user) => {
     if (reaction.message.author.bot) {
+        // check if reaction,message is partial
+        if (reaction.message.partial) {
+            //fetch the message with it's id in the channel
+            reaction.message = await reaction.message.channel.fetch(reaction.message.id);
+        }
         let content = reaction.message?.embeds[0]?.description;
         if (content) {
             let ticket;

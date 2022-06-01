@@ -56,6 +56,25 @@ module.exports = {
                     });
                 }
             }
+
+            let vc = await mainGuild.channels.fetch(client.settings.voiceTicketChannelID);
+            if (vc) {
+                vc.permissionOverwrites.create(mainGuild.id, {
+                    CONNECT: true
+                });
+            }
+
+            let announcementChannel = await mainGuild.channels.fetch(client.settings.toCloseMessageChannel);
+            if (announcementChannel) {
+                announcementChannel.send({
+                    embeds: [
+                        new MessageEmbed()
+                            .setDescription(`<#${client.settings.ticketOpening.channel}>`)
+                            .setImage('https://i.imgur.com/1ApEpoi.png')
+                            .setColor('9bd2d2')
+                    ]
+                })
+            }
         }
 
         if (interaction) {
@@ -119,11 +138,18 @@ module.exports = {
                                 .setColor('9bd2d2')
                                 .setDescription(`🔒 | La permanence est actuellement fermée ! La prochaine permanence aura lieu <t:${formatTimestamp}:R>
 
-                            En cas de soucis urgent, n'hésite pas a te rendre dans <#718250345951658064>`)
+                            En cas de soucis urgent, n'hésite pas à te rendre dans <#718250345951658064>`)
                         ],
                         components: []
                     })
                 }
+            }
+
+            let vc = await mainGuild.channels.fetch(client.settings.voiceTicketChannelID);
+            if (vc) {
+                vc.permissionOverwrites.create(mainGuild.id, {
+                    CONNECT: false
+                });
             }
         }
 
@@ -140,7 +166,7 @@ module.exports = {
         }
     },
 
-    updateAvailable: async (Client, interaction) => {
+    updateAvailable: async (Client) => {
         let mainGuild = await Client.guilds.fetch(Client.settings.mainGuildID);
         if (mainGuild) {
             let channel = await mainGuild.channels.fetch(Client.settings.available.channelID);
@@ -151,7 +177,7 @@ module.exports = {
 
                     let users = await Client.available.findAll();
                     for (let i in Object.keys(users)) {
-                        text += `<@${users[i].userID}>\n`;
+                        text += `${users[i].occupied ? '🔴' : '🟢'} <@${users[i].userID}>\n`;
                     }
 
                     if (text.length < 1) text = "Aucun bénévole disponible !";
@@ -282,7 +308,7 @@ module.exports = {
                 let msg = await mainChannel.send({
                     embeds: [
                         (open ? openEmbed : closeEmbed),
-                    ], content: open ? undefined : `<@&${Client.settings.toCloseMessageMentionRole}>`
+                    ]
                 });
 
                 if (!open) {

@@ -1,5 +1,8 @@
 const colors = require('colors');
-const {scheduleJob} = require('node-schedule')
+const {scheduleJob} = require('node-schedule');
+const {SlashCommandBuilder} = require('@discordjs/builders');
+const {REST} = require('@discordjs/rest');
+const {Routes} = require('discord-api-types/v9')
 
 module.exports = async (Client) => {
     await Client.Ticket.sync();
@@ -7,6 +10,7 @@ module.exports = async (Client) => {
     await Client.reOpen.sync();
     await Client.available.sync();
     await Client.open.sync();
+    await Client.Report.sync();
 
     console.log(('─────────────────────────────────\n' +
         '────────▄███▄───────▄███▄────────\n' +
@@ -276,5 +280,88 @@ module.exports = async (Client) => {
         await Client.open.create({
             open: true
         });
+
+        let commands = [];
+
+        Client.commands.forEach(command => {
+           let data = new SlashCommandBuilder()
+               .setName(command.name)
+               .setDescription(command.description || 'Aucune description');
+
+           if (command.options.length > 0) {
+               for (let option of command.options) {
+                   switch (option.type) {
+                       case 'string':
+                           data.addStringOption(opt =>
+                               opt.setName(option.name)
+                                   .setDescription(option.desc || 'Aucune description')
+                                   .setRequired(option.required)
+                           );
+                           break;
+
+                       case 'int':
+                           data.addIntegerOption(opt =>
+                               opt.setName(option.name)
+                                   .setDescription(option.desc || 'Aucune description')
+                                   .setRequired(option.required)
+                           );
+                           break;
+
+                       case 'number':
+                           data.addNumberOption(opt =>
+                               opt.setName(option.name)
+                                   .setDescription(option.desc || 'Aucune description')
+                                   .setRequired(option.required)
+                           );
+                           break;
+
+                       case 'boolean':
+                           data.addBooleanOption(opt =>
+                               opt.setName(option.name)
+                                   .setDescription(option.desc || 'Aucune description')
+                                   .setRequired(option.required)
+                           );
+                           break;
+
+                       case 'user':
+                           data.addUserOption(opt =>
+                               opt.setName(option.name)
+                                   .setDescription(option.desc || 'Aucune description')
+                                   .setRequired(option.required)
+                           );
+                           break;
+
+                       case 'channel':
+                           data.addChannelOption(opt =>
+                               opt.setName(option.name)
+                                   .setDescription(option.desc || 'Aucune description')
+                                   .setRequired(option.required)
+                           );
+                           break;
+
+                       case 'role':
+                           data.addRoleOption(opt =>
+                               opt.setName(option.name)
+                                   .setDescription(option.desc || 'Aucune description')
+                                   .setRequired(option.required)
+                           );
+                           break;
+                   }
+               }
+           }
+
+           commands.push(data.toJSON());
+        });
+
+        const rest = new REST({ version: '9' }).setToken(Client.token);
+
+        try {
+            await rest.put(
+                Routes.applicationGuildCommands(Client.user.id, mainGuild.id),
+                { body: commands }
+            );
+        } catch (e) {
+            console.log(e)
+        }
     }
 }

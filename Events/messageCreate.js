@@ -14,23 +14,6 @@ module.exports = async (Client, message) => {
         });
     }
 
-    if (message.content === 'ticket') {
-        let row = new MessageActionRow()
-            .addComponents(
-                new MessageButton()
-                    .setCustomId('OpenTicket')
-                    .setLabel('Ouvrir une écoute')
-                    .setEmoji('👋')
-                    .setStyle('SUCCESS')
-            );
-
-        let embed = new MessageEmbed()
-            .setColor('9bd2d2')
-            .setDescription('[ticket open message]');
-
-        message.channel.send({ embeds: [embed], components: [row]});
-    }
-
     // handle DM messages redirection
     if (message.channel.type === 'DM') {
         let ticket = await Client.Ticket.findOne({ where: { ownerID: message.author.id }});
@@ -60,10 +43,18 @@ module.exports = async (Client, message) => {
                     if (message.reference) {
                         let replyMsg = await message.channel.messages.fetch(message.reference.messageId);
                         if (replyMsg) {
-                            let content = replyMsg.embeds[0].description;
-                            let msgToReply = ticketChannel.messages.cache.find(msg => msg.content === content);
-                            if (msgToReply) {
-                                return msgToReply.reply({ embeds: [ embed ]});
+                            // check if replyMsg is partial and if yes fetch it in the channel with the id
+                            if (replyMsg.partial) {
+                                replyMsg = await message.channel.messages.fetch(message.reference.messageId);
+                            }
+                            let content = replyMsg?.embeds[0]?.description;
+                            if (content) {
+                                let msgToReply = ticketChannel.messages.cache.find(msg => msg.content === content);
+                                if (msgToReply) {
+                                    return msgToReply.reply({embeds: [embed]});
+                                }
+                            } else {
+                                ticketChannel.send({ embeds: [embed]});
                             }
                         }
                     }
@@ -71,6 +62,49 @@ module.exports = async (Client, message) => {
                     ticketChannel.send({ embeds: [ embed ]});
                 }
             }
+        } else {
+            let embed = new MessageEmbed()
+                .setColor('9bd2d2')
+                .setThumbnail(Client.user.avatarURL())
+
+            let row = new MessageActionRow()
+
+            let open = await Client.Open.findOne();
+            if (open.open) {
+                row.addComponents(
+                    new MessageButton()
+                        .setStyle('PRIMARY')
+                        .setDisabled(false)
+                        .setEmoji('👋')
+                        .setLabel('Ouvrir une écoute')
+                        .setCustomId('OpenTicket')
+                );
+
+                embed.setDescription(`Bienvenue sur Le Trèfle 2.0 !\n\nVous pouvez dès maintenant ouvrir une écoute à l'aide du bouton ci-dessous.\n`)
+            } else {
+                row.addComponents(
+                    new MessageButton()
+                        .setStyle('PRIMARY')
+                        .setDisabled(true)
+                        .setEmoji('👋')
+                        .setLabel('Ouvrir une écoute')
+                        .setCustomId('OpenTicket')
+                );
+            }
+
+            row.addComponents(
+                new MessageButton()
+                    .setStyle('SECONDARY')
+                    .setURL('https://letrefle.org')
+                    .setLabel('Consulter notre site'),
+
+                new MessageButton()
+                    .setStyle('SECONDARY')
+                    .setURL('https://discord.gg/letrefle')
+                    .setLabel('Rejoindre notre serveur discord')
+            );
+
+
         }
     }
 
@@ -100,10 +134,14 @@ module.exports = async (Client, message) => {
             if (message.reference) {
                 let replyMsg = await message.channel.messages.fetch(message.reference.messageId);
                 if (replyMsg) {
-                    let content = replyMsg.embeds[0].description;
-                    let msgToReply = user.dmChannel.messages.cache.find(msg => msg.content === content);
-                    if (msgToReply) {
-                        return msgToReply.reply({ embeds: [ embed ]});
+                    let content = replyMsg?.embeds[0]?.description;
+                    if (content) {
+                        let msgToReply = user.dmChannel.messages.cache.find(msg => msg.content === content);
+                        if (msgToReply) {
+                            return msgToReply.reply({embeds: [embed]});
+                        }
+                    } else {
+                        user.dmChannel.send({ embeds: [embed]});
                     }
                 }
             }
