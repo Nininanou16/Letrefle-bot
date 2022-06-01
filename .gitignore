@@ -1,3 +1,4 @@
 settings.json
 database.sqlite
 /node_modules/
+/.idea/
