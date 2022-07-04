@@ -58,13 +58,6 @@ module.exports = {
                 }
             }
 
-            let vc = await mainGuild.channels.fetch(client.settings.voiceTicketChannelID);
-            if (vc) {
-                vc.permissionOverwrites.create(mainGuild.id, {
-                    CONNECT: true
-                });
-            }
-
             let announcementChannel = await mainGuild.channels.fetch(client.settings.toCloseMessageChannel);
             if (announcementChannel) {
                 announcementChannel.send({
@@ -75,6 +68,14 @@ module.exports = {
                             .setColor('9bd2d2')
                     ]
                 })
+            }
+
+            let voiceChannel = await mainGuild.channels.fetch(client.settings.voiceTicketChannelID);
+            if (voiceChannel) {
+                voiceChannel.permissionOverwrites.edit(mainGuild.id, {
+                    VIEW_CHANNEL: true,
+                    CONNECT: true,
+                });
             }
         }
 
@@ -146,10 +147,11 @@ module.exports = {
                 }
             }
 
-            let vc = await mainGuild.channels.fetch(client.settings.voiceTicketChannelID);
-            if (vc) {
-                vc.permissionOverwrites.create(mainGuild.id, {
-                    CONNECT: false
+            let voiceChannel = await mainGuild.channels.fetch(client.settings.voiceTicketChannelID);
+            if (voiceChannel) {
+                voiceChannel.permissionOverwrites.edit(mainGuild.id, {
+                    VIEW_CHANNEL: false,
+                    CONNECT: false,
                 });
             }
         }

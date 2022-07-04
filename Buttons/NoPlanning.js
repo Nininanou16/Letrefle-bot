@@ -55,5 +55,13 @@ module.exports = async (Client, interaction) => {
                 })
             }
         }
+
+        let voiceChannel = await mainGuild.channels.fetch(Client.settings.voiceTicketChannelID);
+        if (voiceChannel) {
+            voiceChannel.permissionOverwrites.edit(mainGuild.id, {
+                VIEW_CHANNEL: false,
+                CONNECT: false,
+            });
+        }
     }
 }
