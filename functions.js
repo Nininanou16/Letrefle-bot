@@ -1,4 +1,5 @@
 const {MessageActionRow, MessageButton, MessageEmbed} = require('discord.js')
+const {post} = require('axios')
 
 module.exports = {
     open: async (client, interaction) => {
@@ -325,5 +326,34 @@ module.exports = {
 
             return true;
         } else return false;
+    },
+
+    error: async (Client, error) => {
+        console.log(`${Date.now()} - Critical error :`);
+        console.log(error);
+
+        error = error.toString();
+        if (error.length >= 1500) {
+            let url = await post('https://www.toptal.com/developers/hastebin/documents', error);
+
+            error = url.data;
+        } else {
+            error = `\`\`\`js${error}\`\`\``
+        }
+
+        let mainGuild = await Client.guilds.fetch(Client.settings.mainGuildID);
+        if (mainGuild) {
+            let logsChannel = await mainGuild.channels.fetch(Client.settings.logsChannelID);
+            if (logsChannel) {
+                logsChannel.send({
+                    embeds: [
+                        new MessageEmbed()
+                            .setColor('9bd2d2')
+                            .setTitle(':warning: | Unhandled critical error :')
+                            .setDescription(error)
+                    ]
+                })
+            }
+        }
     }
 }
