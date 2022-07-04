@@ -93,7 +93,7 @@ module.exports = async (Client, interaction, Ticket) => {
             VIEW_CHANNEL: false
         });
 
-        await ticketChannel.permissionOverwrites.create(ticketChannel.guild.roles.cache.get('908002560311455744'), { // TODO: replace role by parameter in config file
+        await ticketChannel.permissionOverwrites.create(ticketChannel.guild.roles.cache.get(Client.settings.referentRoleID), {
             VIEW_CHANNEL: true
         })
 
