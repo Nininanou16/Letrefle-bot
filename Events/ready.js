@@ -40,6 +40,14 @@ module.exports = async (Client) => {
         '──────────────────███────────────\n' +
         '───────────────────███───────────').green);
 
+    let mainServer = await Client.guilds.fetch(Client.settings.mainGuildID);
+    if (mainServer) {
+        let logsChannel = await mainServer.channels.fetch(Client.settings.logsChannelID);
+        if (logsChannel) {
+            logsChannel.send('<:letrefle:881678451608788993> | Démarrage complet du bot avec succès.');
+        }
+    }
+
     Client.functions.updateAvailable(Client);
     Client.functions.updateChannelsMessage(Client);
 
