@@ -104,11 +104,15 @@ module.exports = async (Client, interaction, Ticket) => {
             attributed: [],
         });
 
-        interaction.reply({ embeds: [
-                new MessageEmbed()
-                    .setColor('GREEN')
-                    .setDescription('✅ | Votre demande d\'écoute à bien été prise en compte, veuillez continuer par messages privés.')
-            ], ephemeral: true});
+        try {
+            interaction.reply({ embeds: [
+                    new MessageEmbed()
+                        .setColor('GREEN')
+                        .setDescription('✅ | Votre demande d\'écoute à bien été prise en compte, veuillez continuer par messages privés.')
+                ], ephemeral: true});
+        } catch (e) {
+            Client.functions.error(e);
+        }
 
         let available = await Client.available.findAll({ where: { occupied: false }});
         let options = [];
