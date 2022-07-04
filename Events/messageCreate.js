@@ -69,7 +69,7 @@ module.exports = async (Client, message) => {
 
             let row = new MessageActionRow()
 
-            let open = await Client.Open.findOne();
+            let open = await Client.open.findOne();
             if (open.open) {
                 row.addComponents(
                     new MessageButton()
