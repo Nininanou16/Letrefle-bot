@@ -24,7 +24,7 @@ module.exports = async (Client, interaction) => {
                     embeds: [
                         new MessageEmbed()
                             .setColor('9bd2d2')
-                            .setDescription(`🔒 | Ce salon d\'écoute a été fermé par ${(interaction.message.channel.type === 'DM') ? 'l\'utilisateur' : 'le bénévole écoutant'}, plus aucun message ne sera transmit. Il sera supprimé automatiquement sous 30 secondes.`)
+                            .setDescription(`🔒 | Ce salon d\'écoute a été fermé par ${(interaction.message.channel.type === 'DM') ? 'l\'utilisateur' : 'le bénévole écoutant'}, plus aucun message ne sera transmit. Il sera supprimé automatiquement sous 10 secondes.`)
                     ]
                 })
 
@@ -157,7 +157,7 @@ module.exports = async (Client, interaction) => {
 
                     setTimeout(() => {
                         ticketChannel.delete();
-                    }, 5000);
+                    }, 10000);
                 });
             }
         }
