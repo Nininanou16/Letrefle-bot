@@ -180,10 +180,17 @@ module.exports = {
 
                     let users = await Client.available.findAll();
                     for (let i in Object.keys(users)) {
-                        text += `${users[i].occupied ? '🔴' : '🟢'} <@${users[i].userID}>\n`;
+                        text += `\n${users[i].occupied ? '🔴' : '🟢'} <@${users[i].userID}>`;
                     }
 
                     if (text.length < 1) text = "Aucun bénévole disponible !";
+
+                    let spectators = await Client.spectators.findAll()
+                    let specTxt = '';
+                    for (let i in Object.keys(spectators)) {
+                        specTxt += `:eyes: <@${spectators[i].userID}>`
+                    }
+                    if (specTxt.length > 1) text += `\n\n${specTxt}`
 
                     let row = new MessageActionRow()
                         .addComponents(
@@ -196,13 +203,18 @@ module.exports = {
                             new MessageButton()
                                 .setCustomId('StopService')
                                 .setLabel('Quitter la permanence')
+                                .setStyle('SECONDARY'),
+
+                            new MessageButton()
+                                .setCustomId('Spectate')
+                                .setLabel('Mode spectateur')
                                 .setStyle('SECONDARY')
                         )
                     msg.edit({
                         embeds: [
                             new MessageEmbed()
                                 .setColor('9bd2d2')
-                                .setDescription(`Bénévoles disponibles :\n\n${text}`)
+                                .setDescription(`Bénévoles disponibles :\n${text}`)
                         ], components: [row], content: null
                     })
                 }

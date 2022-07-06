@@ -104,15 +104,16 @@ module.exports = async (Client, interaction, Ticket) => {
             attributed: [],
         });
 
-        try {
-            interaction.reply({ embeds: [
-                    new MessageEmbed()
-                        .setColor('GREEN')
-                        .setDescription('✅ | Votre demande d\'écoute à bien été prise en compte, veuillez continuer par messages privés.')
-                ], ephemeral: true});
-        } catch (e) {
-            Client.functions.error(e);
-        }
+        // try {
+        //     interaction.reply({ embeds: [
+        //             new MessageEmbed()
+        //                 .setColor('GREEN')
+        //                 .setDescription('✅ | Votre demande d\'écoute à bien été prise en compte, veuillez continuer par messages privés.')
+        //         ], ephemeral: true});
+        // } catch (e) {
+        //     Client.functions.error(e);
+        // }
+        // TODO: check if interaction can be replied
 
         let available = await Client.available.findAll({ where: { occupied: false }});
         let options = [];
@@ -120,8 +121,16 @@ module.exports = async (Client, interaction, Ticket) => {
         for (let i of Object.values(available)) {
             let user = await Client.users.fetch(i.userID);
             if (user) {
+                let username = user.username;
+                let mainGuild = await Client.guilds.fetch(Client.settings.mainGuildID);
+                if (mainGuild) {
+                    let member = mainGuild.members.fetch(user.id)
+                    if (member && member.nickname) {
+                        username = member.nickname
+                    }
+                }
                 options.push({
-                    label: user.username,
+                    label: username,
                     value: i.userID
                 });
             }
@@ -139,8 +148,9 @@ module.exports = async (Client, interaction, Ticket) => {
                     new MessageEmbed()
                         .setColor('9bd2d2')
                         .setDescription(':warning: | Tous les bénévoles sont actuellement occupés. Merci d\'utiliser la commande `/assigner` pour assigner un nouveau bénévole écoutant.')
-                ]
+                ], content: `<@&${Client.settings.referentRoleID}>`
             })
+            // TODO: complete the occupation & wait message
         } else {
             let attributeRow = new MessageActionRow()
                 .addComponents(
@@ -153,7 +163,8 @@ module.exports = async (Client, interaction, Ticket) => {
                 )
 
             // send channel msg
-            ticketChannel.send({ embeds: [
+            ticketChannel.send({
+                content: `<@&${Client.settings.referentRoleID}>`, embeds: [
                     new MessageEmbed()
                         .setColor('9bd2d2')
                         .setDescription('🍀 | Nouvelle demande d\'écoute. Veuillez attribuer un bénévole écoutant.')

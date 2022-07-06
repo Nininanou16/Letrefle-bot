@@ -11,6 +11,7 @@ module.exports = async (Client) => {
     await Client.available.sync();
     await Client.open.sync();
     await Client.Report.sync();
+    await Client.spectators.sync();
 
     console.log(('─────────────────────────────────\n' +
         '────────▄███▄───────▄███▄────────\n' +

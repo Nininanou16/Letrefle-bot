@@ -17,6 +17,17 @@ module.exports = async (Client, interaction) => {
 
         let ids = []
 
+        let spectators = await Client.spectators.findAll();
+        for (let i in Object.keys(spectators)) {
+            let user = await Client.users.fetch(spectators[i].userID);
+            if (user) {
+                ticketChannel.permissionOverwrites.create(user, {
+                    VIEW_CHANNEL: true,
+                    SEND_MESSAGES: false
+                })
+            }
+        }
+
         for (let i of users) {
             text += `<@${i.id}> `;
             ids.push(i.id)

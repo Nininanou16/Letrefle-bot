@@ -106,4 +106,8 @@ Client.open = Client.db.define('open', {
     open: Sequelize.BOOLEAN,
 });
 
+Client.spectators = Client.db.define('spectators', {
+    userID: Sequelize.TEXT,
+})
+
 Client.login(Client.settings.secret_token).then(() => {});

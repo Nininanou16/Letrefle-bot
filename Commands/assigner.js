@@ -35,7 +35,7 @@ module.exports = {
             embeds: [
                 new MessageEmbed()
                     .setColor('db3226')
-                    .setDescription(':x: | Ce bénévole ne semble pas dans la permanence !')
+                    .setDescription(':x: | Ce bénévole ne semble pas etre dans la permanence !')
             ], ephemeral: true
         });
 
@@ -49,6 +49,17 @@ module.exports = {
                         .setDescription(':satellite: | L\'utilisateur est en cours d\'ajout...')
                 ], ephemeral: true
             });
+
+            let spectators = await Client.spectators.findAll();
+            for (let i in Object.keys(spectators)) {
+                let user = await Client.users.fetch(spectators[i].userID);
+                if (user) {
+                    channel.permissionOverwrites.update(user, {
+                        VIEW_CHANNEL: true,
+                        SEND_MESSAGES: false
+                    })
+                }
+            }
 
             channel.permissionOverwrites.create(user.user.id, {
                 VIEW_CHANNEL: true,
