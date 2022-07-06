@@ -52,7 +52,11 @@ module.exports = {
             attributed: JSON.stringify(users),
         });
 
-        interaction.channel.permissionOverwrites.delete(user.user.id);
+        try {
+            interaction.channel.permissionOverwrites.delete(user.user.id);
+        } catch (e) {
+            Client.functions.error(e)
+        }
 
         let occupied = {};
         for (let user of JSON.parse(ticket.attributed)) {
