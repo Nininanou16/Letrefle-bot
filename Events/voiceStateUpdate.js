@@ -1,10 +1,6 @@
 const {MessageEmbed} = require('discord.js')
 
 module.exports = async (Client, oldState, newState) => {
-    // console.log('update')
-    // if (!oldState.channel) Client.emit('voiceChannelJoin', (newState));
-    // if (!newState.channel) Client.emit('voiceChannelLeave', (oldState));
-    // if (newState.channel && oldState.channel && oldState.channel !== newState.channel) Client.emit()
 
     if (newState.channelId === Client.settings.voiceTicketChannelID) {
         let ticket = await Client.Ticket.findOne({ where: { ownerID: newState.member.user.id }});
@@ -34,6 +30,14 @@ module.exports = async (Client, oldState, newState) => {
                 for (let i of ticket.attributed) {
                     let user = Client.users.cache.get(i);
                     vc.permissionOverwrites.create(user, {
+                        VIEW_CHANNEL: true,
+                        CONNECT: true
+                    })
+                }
+
+                let referentRole = await vc.guild.roles.fetch(Client.settings.referentRoleID);
+                if (referentRole) {
+                    vc.permissionOverwrites.create(referentRole, {
                         VIEW_CHANNEL: true,
                         CONNECT: true
                     })
