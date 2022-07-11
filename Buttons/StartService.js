@@ -22,19 +22,6 @@ module.exports = async (Client, interaction) => {
             ], ephemeral: true
         });
 
-        let tickets = await Client.Ticket.findAll();
-        for (let i in Object.keys(tickets)) {
-            let guild = Client.guilds.cache.get(Client.settings.mainGuildID);
-            if (guild) {
-                let channel = await guild.channels.fetch(tickets[i].channelID);
-                if (channel) {
-                    channel.permissionOverwrites.create(user, {
-                        VIEW_CHANNEL: true
-                    });
-                }
-            }
-        }
-
         Client.functions.updateAvailable(Client)
     }
 }

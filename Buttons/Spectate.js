@@ -35,14 +35,16 @@ module.exports = async (Client, interaction) => {
     async function update(status) {
         let tickets = await Client.Ticket.findAll();
         for (let i in Object.keys(tickets)) {
-            let guild = Client.guilds.cache.get(Client.settings.mainGuildID);
-            if (guild) {
-                let channel = await guild.channels.fetch(tickets[i].channelID);
-                if (channel) {
-                    channel.permissionOverwrites.create(interaction.member, {
-                        VIEW_CHANNEL: status,
-                        SEND_MESSAGES: false,
-                    });
+            if (!tickets[i].attributed.includes(interaction.user.id)) {
+                let guild = Client.guilds.cache.get(Client.settings.mainGuildID);
+                if (guild) {
+                    let channel = await guild.channels.fetch(tickets[i].channelID);
+                    if (channel) {
+                        channel.permissionOverwrites.create(interaction.member, {
+                            VIEW_CHANNEL: status,
+                            SEND_MESSAGES: false,
+                        });
+                    }
                 }
             }
         }
