@@ -91,7 +91,7 @@ module.exports = async (Client, interaction) => {
             embeds: [
                 new MessageEmbed()
                     .setColor('9bd2d2')
-                    .setDescription(`💬 | Cette écoute est maintenant attribuée, tout message envoyé dans ce salon sera transmi à l'utilisateur.${txt.length > 1 ? `\n\nL'utilisateur à déja été signalé pour les motifs suivants :\n${txt}` : ``}`)
+                    .setDescription(`💬 | Cette écoute est maintenant attribuée, tout message envoyé dans ce salon sera transmis à l'utilisateur.${txt.length > 1 ? `\n\nL'utilisateur à déja été signalé pour les motifs suivants :\n${txt}` : ``}`)
             ], components: [row], content: text
         });
 

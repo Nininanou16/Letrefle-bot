@@ -188,9 +188,9 @@ module.exports = {
                     let spectators = await Client.spectators.findAll()
                     let specTxt = '';
                     for (let i in Object.keys(spectators)) {
-                        specTxt += `:eyes: <@${spectators[i].userID}>`
+                        specTxt += `\n:eyes: <@${spectators[i].userID}>`
                     }
-                    if (specTxt.length > 1) text += `\n\n${specTxt}`
+                    if (specTxt.length > 1) text += `\n${specTxt}`
 
                     let row = new MessageActionRow()
                         .addComponents(
