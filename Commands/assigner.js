@@ -54,7 +54,7 @@ module.exports = {
             for (let i in Object.keys(spectators)) {
                 let user = await Client.users.fetch(spectators[i].userID);
                 if (user) {
-                    channel.permissionOverwrites.update(user, {
+                    channel.permissionOverwrites.create(user, {
                         VIEW_CHANNEL: true,
                         SEND_MESSAGES: false
                     })
@@ -77,7 +77,7 @@ module.exports = {
                 attributed = [];
                 first = true;
             }
-            else attributed = JSON.parse(ticket.attributed);
+            else attributed = ticket.attributed;
 
             if (typeof attributed !== 'object') {
                 let oldAttributed = attributed;
@@ -91,7 +91,7 @@ module.exports = {
                 ticketID: ticket.ticketID,
                 ownerID: ticket.ownerID,
                 channelID: channel.id,
-                attributed: JSON.stringify(attributed),
+                attributed: attributed,
             });
 
             reply.delete();
