@@ -124,7 +124,7 @@ module.exports = {
                     embeds: [
                         new MessageEmbed()
                             .setColor('9bd2d2')
-                            .setDescription('💬 | Cette écoute est maintenant attribuée, tout message envoyé dans ce salon sera transmi à l\'utilisateur.')
+                            .setDescription('💬 | Cette écoute est maintenant attribuée, tout message envoyé dans ce salon sera transmis à l\'utilisateur.')
                     ], components: [row], content: `<@${user.user.id}>`
                 });
             }
