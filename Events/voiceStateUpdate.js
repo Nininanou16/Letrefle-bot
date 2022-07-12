@@ -24,7 +24,6 @@ module.exports = async (Client, oldState, newState) => {
             if (vc) {
                 await newState.setChannel(vc);
 
-                if (typeof ticket.attributed === 'string') ticket.attributed = JSON.parse(ticket.attributed);
                 ticket.attributed.push(ticket.ownerID);
 
                 for (let i of ticket.attributed) {
