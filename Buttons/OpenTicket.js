@@ -101,7 +101,7 @@ module.exports = async (Client, interaction, Ticket) => {
             ticketID: id,
             ownerID: interaction.user.id,
             channelID: ticketChannel.id,
-            attributed: [],
+            attributed: null,
         });
 
         // try {
@@ -157,10 +157,8 @@ module.exports = async (Client, interaction, Ticket) => {
                     new MessageSelectMenu()
                         .setCustomId('addAvailable')
                         .setPlaceholder('Ajouter un bénévole')
-                        // .setMinValues(1)
-                        // .setMaxValues(25)
                         .addOptions(options)
-                )
+                );
 
             // send channel msg
             ticketChannel.send({
