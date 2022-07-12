@@ -161,38 +161,25 @@ module.exports = async (Client, interaction) => {
                 });
             }
         }
-
-        await ticket.destroy()
-
-        let occupied = {};
-        if (typeof ticket.attributed === 'string') ticket.attributed = JSON.parse(ticket.attributed);
-        if (ticket.attributed.length > 0) {
-            for (let user of ticket.attributed) {
-                occupied[user] = false
-            }
+        if (ticket.attributed) {
+            let occupied = false;
             let tickets = await Client.Ticket.findAll();
-            for (let ticket of Object.values(tickets)) {
-                let assigned = ticket.attributed;
-                for (let user of Object.keys(occupied)) {
-                    if (assigned.includes(user)) {
-                        occupied[user] = true;
-                    }
-                }
+            for (let otherTicket of Object.values(tickets)) {
+                if (otherTicket.attributed == ticket.attributed) occupied = true;
             }
 
-            for (let user of Object.keys(occupied)) {
-                console.log(user)
-                if (!occupied[user]) {
-                    let userDB = await Client.available.findOne({ where: { userID: user }});
-                    if (userDB) {
-                        await userDB.update({
-                            userID: user,
-                            occupied: false,
-                        });
-                    }
+            if (!occupied) {
+                let userDB = await Client.available.findOne({ where: { userID: ticket.attributed }});
+                if (userDB) {
+                    userDB.update({
+                        userID: userDB.userID,
+                        occupied: false,
+                    })
                 }
             }
         }
+
+        await ticket.destroy()
 
         Client.functions.updateAvailable(Client);
 

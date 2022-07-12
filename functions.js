@@ -342,6 +342,174 @@ module.exports = {
         } else return false;
     },
 
+    assign: async (Client, userID, interaction) => {
+        console.log(userID);
+        let ticket = await Client.Ticket.findOne({where: {channelID: interaction.channelId}});
+        if (!ticket) return interaction.reply({
+            embeds: [
+                new MessageEmbed()
+                    .setColor('9bd2d2')
+                    .setDescription(':warning: | Cette commande n\'est utilisable que dans un salon d\'écoute')
+            ]
+        });
+
+        let userDB = await Client.available.findOne({ where: { userID: userID}});
+        if (!userDB) return interaction.reply({
+            embeds: [
+                new MessageEmbed()
+                    .setColor('9bd2d2')
+                    .setDescription(':warning: | Cet utilisateur ne semble pas être dans la permanence.')
+            ], ephemeral: true
+        });
+
+        let mainGuild = await Client.guilds.fetch(Client.settings.mainGuildID);
+        if (mainGuild) {
+            let channel = await mainGuild.channels.fetch(ticket.channelID);
+            if (channel) {
+                let newUser = await Client.users.fetch(userID);
+
+                if (!ticket.attributed) {
+                    if (newUser) {
+                        channel.permissionOverwrites.create(newUser, {
+                            VIEW_CHANNEL: true,
+                            SEND_MESSAGES: true,
+                        });
+
+                        let spectators = await Client.spectators.findAll();
+                        for (let i in Object.keys(spectators)) {
+                            let user = await Client.users.fetch(spectators[i].userID);
+                            if (user) {
+                                channel.permissionOverwrites.create(user, {
+                                    VIEW_CHANNEL: true,
+                                    SEND_MESSAGES: false
+                                })
+                            }
+                        }
+
+                        let row = new MessageActionRow()
+                            .addComponents(
+                                new MessageButton()
+                                    .setCustomId('CloseTicket')
+                                    .setLabel('Fermer l\'écoute')
+                                    .setEmoji('⚠')
+                                    .setStyle('DANGER'),
+
+                                new MessageButton()
+                                    .setCustomId('ReportTicket')
+                                    .setLabel('Vigileance')
+                                    .setEmoji('🔴')
+                                    .setStyle('SECONDARY')
+                                    .setDisabled(true),
+
+                                new MessageButton()
+                                    .setCustomId('AnonyLift')
+                                    .setLabel('Levée d\'identifiant')
+                                    .setEmoji('🆔')
+                                    .setStyle('SECONDARY')
+                            )
+
+                        channel.bulkDelete(99);
+
+                        interaction.reply({
+                            content: `<@${userID}>`,
+                            embeds: [
+                                new MessageEmbed()
+                                    .setColor('9bd2d2')
+                                    .setDescription('💬 | Cette écoute est maintenant attribuée, tout message envoyé dans ce salon sera transmis à l\'utilisateur.')
+                            ], components: [row]
+                        })
+                    }
+                } else {
+                    let oldUser = await Client.users.fetch(ticket.attributed);
+
+                    channel.permissionOverwrites.delete(oldUser);
+                    let spectate = await Client.spectators.findOne({where: {userID: oldUser.id}});
+                    if (spectate) {
+                        channel.permissionOverwrites.create(oldUser, {
+                            VIEW_CHANNEL: true,
+                            SEND_MESSAGES: false,
+                        })
+                    }
+                    if (newUser) {
+                        channel.permissionOverwrites.create(newUser, {
+                            VIEW_CHANNEL: true,
+                            SEND_MESSAGES: true,
+                        });
+
+                        interaction.reply({
+                            embeds: [
+                                new MessageEmbed()
+                                    .setColor('9bd2d2')
+                                    .setDescription(`:white_check_mark: | \`${interaction.user.tag}\` a ajouté \`${newUser.tag}\` à l'écoute.`)
+                            ]
+                        })
+                    }
+                }
+
+                await ticket.update({
+                    ticketID: ticket.ticketID,
+                    ownerID: ticket.ownerID,
+                    channelID: ticket.channelID,
+                    attributed: userID
+                });
+
+            }
+        }
+    },
+
+    unassign: async (Client, userID, interaction) => {
+        let ticket = await Client.Ticket.findOne({where: {channelID: interaction.channelId}});
+        if (!ticket) return interaction.reply({
+            embeds: [
+                new MessageEmbed()
+                    .setColor('9bd2d2')
+                    .setDescription(':warning: | Cette commande n\'est utilisable que dans un salon d\'écoute')
+            ]
+        });
+
+        let userDB = await Client.available.findOne({ where: { userID: userID}});
+        if (!userDB) return interaction.reply({
+            embeds: [
+                new MessageEmbed()
+                    .setColor('9bd2d2')
+                    .setDescription(':warning: | Cet utilisateur ne semble pas être dans la permanence.')
+            ], ephemeral: true
+        });
+
+        let mainGuild = await Client.guilds.fetch(Client.settings.mainGuildID);
+        if (mainGuild) {
+            let channel = await mainGuild.channels.fetch(ticket.channelID);
+            if (channel) {
+                let user = await Client.users.fetch(userID);
+                if (user) {
+                    channel.permissionOverwrites.delete(user);
+                    await ticket.update({
+                        ticketID: ticket.ticketID,
+                        ownerID: ticket.ownerID,
+                        channelID: ticket.channelID,
+                        attributed: null,
+                    });
+
+                    interaction.reply({
+                        embeds: [
+                            new MessageEmbed()
+                                .setColor('9bd2d2')
+                                .setDescription(`:white_check_mark: | \`${interaction.user.tag}\` a désassigné ${user.tag} de l'écoute.`)
+                        ]
+                    })
+
+                    let spec = await Client.spectators.findOne({ where: {userID: user.id} });
+                    if (spec) {
+                        channel.permissionOverwrites.create(user, {
+                            VIEW_CHANNEL: true,
+                            SEND_MESSAGES: false,
+                        })
+                    }
+                }
+            }
+        }
+    },
+
     error: async (Client, error) => {
         console.log(`${Date.now()} - Critical error :`);
         console.log(error);
