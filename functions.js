@@ -455,6 +455,8 @@ module.exports = {
 
             }
         }
+
+        Client.functions.updateAvailable(Client);
     },
 
     unassign: async (Client, userID, interaction) => {
@@ -508,6 +510,8 @@ module.exports = {
                 }
             }
         }
+
+        Client.functions.updateAvailable(Client);
     },
 
     error: async (Client, error) => {
