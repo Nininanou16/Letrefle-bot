@@ -370,11 +370,6 @@ module.exports = {
 
                 if (!ticket.attributed) {
                     if (newUser) {
-                        channel.permissionOverwrites.create(newUser, {
-                            VIEW_CHANNEL: true,
-                            SEND_MESSAGES: true,
-                        });
-
                         let spectators = await Client.spectators.findAll();
                         for (let i in Object.keys(spectators)) {
                             let user = await Client.users.fetch(spectators[i].userID);
@@ -385,6 +380,11 @@ module.exports = {
                                 })
                             }
                         }
+
+                        channel.permissionOverwrites.create(newUser, {
+                            VIEW_CHANNEL: true,
+                            SEND_MESSAGES: true,
+                        });
 
                         let row = new MessageActionRow()
                             .addComponents(
@@ -498,15 +498,7 @@ module.exports = {
                                 .setColor('9bd2d2')
                                 .setDescription(`:white_check_mark: | \`${interaction.user.tag}\` a désassigné ${user.tag} de l'écoute.`)
                         ]
-                    })
-
-                    let spec = await Client.spectators.findOne({ where: {userID: user.id} });
-                    if (spec) {
-                        channel.permissionOverwrites.create(user, {
-                            VIEW_CHANNEL: true,
-                            SEND_MESSAGES: false,
-                        })
-                    }
+                    });
                 }
             }
         }
