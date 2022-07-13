@@ -408,7 +408,7 @@ module.exports = {
                                     .setStyle('SECONDARY')
                             )
 
-                        channel.bulkDelete(99);
+                        await channel.bulkDelete(99);
 
                         interaction.reply({
                             content: `<@${userID}>`,
