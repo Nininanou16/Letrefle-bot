@@ -83,7 +83,7 @@ Client.Ticket = Client.db.define('ticket', {
     ticketID: Sequelize.TEXT,
     ownerID: Sequelize.TEXT,
     channelID: Sequelize.TEXT,
-    attributed: Sequelize.JSON,
+    attributed: Sequelize.TEXT,
 });
 
 // Initiating historic ticket DB model

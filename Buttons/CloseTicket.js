@@ -34,7 +34,7 @@ module.exports = async (Client, interaction) => {
                         embeds: [
                             new MessageEmbed()
                                 .setColor('9bd2d2')
-                                .setDescription(`🍀 | Votre salon d\'écoute a été fermé${(interaction.message.channel.type === 'DM') ? '' : ' par le bénévole écoutant'}. En cas de besoin, n\'hésitez pas a en réouvrir un !`)
+                                .setDescription(`🍀 | Votre salon d\'écoute a été fermé${(interaction.message.channel.type === 'DM') ? '' : ' par le bénévole écoutant'}. En cas de besoin, n\'hésitez pas à en réouvrir un !`)
                         ]
                     })
                 }

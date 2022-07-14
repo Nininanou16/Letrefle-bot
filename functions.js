@@ -156,8 +156,15 @@ module.exports = {
             }
         }
 
+        let spectators = await client.spectators.findAll();
+        for (let i in Object.keys(spectators)) {
+            await spectators[i].destroy();
+        }
+
+        client.functions.updateAvailable(client);
+
         setTimeout(() => {
-            client.functions.open(client)
+            client.functions.open(client);
         }, timestamp-Date.now());
 
         if (interaction) {
@@ -165,7 +172,8 @@ module.exports = {
                 new MessageEmbed()
                     .setColor('9bd2d2')
                     .setDescription('✅ | La permanence à bien été fermée !')
-                ], ephemeral: true})
+                ], ephemeral: true
+            });
         }
     },
 
@@ -343,7 +351,6 @@ module.exports = {
     },
 
     assign: async (Client, userID, interaction) => {
-        console.log(userID);
         let ticket = await Client.Ticket.findOne({where: {channelID: interaction.channelId}});
         if (!ticket) return interaction.reply({
             embeds: [
@@ -361,6 +368,11 @@ module.exports = {
                     .setDescription(':warning: | Cet utilisateur ne semble pas être dans la permanence.')
             ], ephemeral: true
         });
+
+        await userDB.update({
+            userID: userID,
+            occupied: true,
+        })
 
         let mainGuild = await Client.guilds.fetch(Client.settings.mainGuildID);
         if (mainGuild) {
@@ -418,9 +430,44 @@ module.exports = {
                                     .setDescription('💬 | Cette écoute est maintenant attribuée, tout message envoyé dans ce salon sera transmis à l\'utilisateur.')
                             ], components: [row]
                         })
+
+                        await ticket.update({
+                            ticketID: ticket.ticketID,
+                            ownerID: ticket.ownerID,
+                            channelID: ticket.channelID,
+                            attributed: userID
+                        });
                     }
                 } else {
                     let oldUser = await Client.users.fetch(ticket.attributed);
+                    let occupied = false;
+
+                    await ticket.update({
+                        ticketID: ticket.ticketID,
+                        ownerID: ticket.ownerID,
+                        channelID: ticket.channelID,
+                        attributed: userID
+                    });
+
+                    let tickets = await Client.Ticket.findAll();
+                    for (let ticket of Object.values(tickets)) {
+                        if (ticket.attributed === oldUser.id) {
+                            occupied = true
+                            console.log(ticket.attributed)
+                        }
+                    }
+
+                    console.log(occupied)
+
+                    if (!occupied) {
+                        let userDB = await Client.available.findOne({ where: { userID: oldUser.id }});
+                        if (userDB) {
+                            await userDB.update({
+                                userID: userDB.userID,
+                                occupied: false,
+                            })
+                        }
+                    }
 
                     channel.permissionOverwrites.delete(oldUser);
                     let spectate = await Client.spectators.findOne({where: {userID: oldUser.id}});
@@ -445,13 +492,6 @@ module.exports = {
                         })
                     }
                 }
-
-                await ticket.update({
-                    ticketID: ticket.ticketID,
-                    ownerID: ticket.ownerID,
-                    channelID: ticket.channelID,
-                    attributed: userID
-                });
 
             }
         }
