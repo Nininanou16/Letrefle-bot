@@ -140,7 +140,12 @@ module.exports = async (Client, interaction, Ticket) => {
             interaction.user.send({ embeds: [
                 new MessageEmbed()
                     .setColor('d36515')
-                    .setDescription(':warning: | Tous les bénévoles sont actuellement en écoute. Vous serez recontacté dès que possible')
+                    .setDescription('Bonsoir, \n' +
+                        '\n' +
+                        'En raison d\'une forte affluence, l\'ensemble des bénévoles écoutants sont en écoute. \n' +
+                        'En ce sens il y a de l\'attente. Dès qu\'un bénévole est disponible il prendra en charge ta demande. \n' +
+                        '\n' +
+                        'Merci pour ta compréhension 🙏')
                 ]
             });
 
