@@ -24,11 +24,9 @@ module.exports = async (Client, oldState, newState) => {
             if (vc) {
                 await newState.setChannel(vc);
 
-                ticket.attributed.push(ticket.ownerID);
-
-                for (let i of ticket.attributed) {
-                    let user = Client.users.cache.get(i);
-                    vc.permissionOverwrites.create(user, {
+                let attributed = Client.users.cache.get(ticket.attributed);
+                if (attributed) {
+                    vc.permissionOverwrites.create(attributed, {
                         VIEW_CHANNEL: true,
                         CONNECT: true
                     })
