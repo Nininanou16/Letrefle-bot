@@ -408,7 +408,7 @@ module.exports = {
 
                                 new MessageButton()
                                     .setCustomId('ReportTicket')
-                                    .setLabel('Vigileance')
+                                    .setLabel('Vigilance')
                                     .setEmoji('🔴')
                                     .setStyle('SECONDARY')
                                     .setDisabled(true),
