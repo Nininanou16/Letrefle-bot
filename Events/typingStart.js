@@ -6,7 +6,11 @@ module.exports = async (Client, type) => {
                 if (guildTicket) {
                     let user = Client.users.cache.get(guildTicket.ownerID);
                     if (user) {
-                        user.dmChannel.sendTyping();
+                        try {
+                            user.dmChannel.sendTyping();
+                        } catch (e) {
+                            console.log(e);
+                        }
                     }
                 }
                 break;
@@ -18,7 +22,11 @@ module.exports = async (Client, type) => {
                     if (mainGuild) {
                         let channel = await mainGuild.channels.fetch(ticket.channelID);
                         if (channel) {
-                            channel.sendTyping();
+                            try {
+                                channel.sendTyping();
+                            } catch (e) {
+                                console.log(e);
+                            }
                         }
                     }
                 }
