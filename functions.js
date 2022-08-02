@@ -372,7 +372,17 @@ module.exports = {
         await userDB.update({
             userID: userID,
             occupied: true,
-        })
+        });
+
+        let oldUserDB = await Client.available.findOne({ where: { userID: ticket.attributed}});
+        if (oldUserDB) {
+            oldUserDB.update({
+                userID: ticket.attributed,
+                occupied: false,
+            });
+        }
+        
+        Client.functions.updateAvailable(Client);
 
         let mainGuild = await Client.guilds.fetch(Client.settings.mainGuildID);
         if (mainGuild) {
