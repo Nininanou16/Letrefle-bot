@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/Nininanou16/LeTrefleTicket.git"
+    "url": "git+https://github.com/Nininanou16/Letrefle-bot.git"
   },
   "author": "Nininanou16",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://gitlab.com/Nininanou16/LeTrefleTicket/issues"
+    "url": "https://github.com/Nininanou16/Letrefle-bot/issues"
   },
-  "homepage": "https://gitlab.com/Nininanou16/LeTrefleTicket#readme",
+  "homepage": "https://github.com/Nininanou16/Letrefle-bot#readme",
   "dependencies": {
     "@discordjs/builders": "^0.12.0",
     "@discordjs/rest": "^0.3.0",
