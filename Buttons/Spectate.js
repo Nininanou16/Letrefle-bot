@@ -35,7 +35,7 @@ module.exports = async (Client, interaction) => {
     async function update(status) {
         let tickets = await Client.Ticket.findAll();
         for (let i in Object.keys(tickets)) {
-            if (!tickets[i].attributed === interaction.user.id) {
+            if (!tickets[i].attributed !== interaction.user.id) {
                 let guild = Client.guilds.cache.get(Client.settings.mainGuildID);
                 if (guild) {
                     let channel = await guild.channels.fetch(tickets[i].channelID);
