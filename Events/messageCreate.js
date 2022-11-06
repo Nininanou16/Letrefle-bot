@@ -1,4 +1,4 @@
-const {MessageActionRow, MessageButton, MessageEmbed} = require('discord.js')
+const {ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle, ChannelType} = require('discord.js')
 
 module.exports = async (Client, message) => {
     if (message.author.bot) return;
@@ -7,7 +7,7 @@ module.exports = async (Client, message) => {
         let msg = await message.channel.send('Configuration...');
         msg.edit({
             embeds: [
-                new MessageEmbed()
+                new EmbedBuilder()
                     .setColor('9bd2d2')
                     .setDescription(`ChannelID: ${message.channel.id}\nMessageID: ${msg.id}`)
             ], content: null
@@ -15,7 +15,7 @@ module.exports = async (Client, message) => {
     }
 
     // handle DM messages redirection
-    if (message.channel.type === 'DM') {
+    if (message.channel.type === ChannelType.DM) {
         let ticket = await Client.Ticket.findOne({ where: { ownerID: message.author.id }});
 
         if (ticket) {
@@ -23,8 +23,8 @@ module.exports = async (Client, message) => {
             if (mainGuild) {
                 let ticketChannel = await mainGuild.channels.fetch(ticket.channelID)
                 if (ticketChannel) {
-                    let embed = new MessageEmbed()
-                        .setAuthor('Utilisateur', 'https://cdn.discordapp.com/attachments/757897064754708560/883734125985529866/default-profile-picture-clipart-3.jpg')
+                    let embed = new EmbedBuilder()
+                        .setAuthor({ name: 'Utilisateur', iconURL: 'https://cdn.discordapp.com/attachments/757897064754708560/883734125985529866/default-profile-picture-clipart-3.jpg' })
                         .setDescription(message.content)
                         .setTimestamp()
                         .setColor('9bd2d2');
@@ -63,17 +63,17 @@ module.exports = async (Client, message) => {
                 }
             }
         } else {
-            let embed = new MessageEmbed()
+            let embed = new EmbedBuilder()
                 .setColor('9bd2d2')
                 .setThumbnail(Client.user.avatarURL())
 
-            let row = new MessageActionRow()
+            let row = new ActionRowBuilder()
 
             let open = await Client.open.findOne();
             if (open.open) {
                 row.addComponents(
-                    new MessageButton()
-                        .setStyle('PRIMARY')
+                    new ButtonBuilder()
+                        .setStyle(ButtonStyle.Primary)
                         .setDisabled(false)
                         .setEmoji('👋')
                         .setLabel('Ouvrir une écoute')
@@ -83,8 +83,8 @@ module.exports = async (Client, message) => {
                 embed.setDescription(`Bienvenue sur Le Trèfle 2.0 !\n\nVous pouvez dès maintenant ouvrir une écoute à l'aide du bouton ci-dessous.\n`)
             } else {
                 row.addComponents(
-                    new MessageButton()
-                        .setStyle('PRIMARY')
+                    new ButtonBuilder()
+                        .setStyle(ButtonStyle.Primary)
                         .setDisabled(true)
                         .setEmoji('👋')
                         .setLabel('Ouvrir une écoute')
@@ -93,13 +93,13 @@ module.exports = async (Client, message) => {
             }
 
             row.addComponents(
-                new MessageButton()
-                    .setStyle('SECONDARY')
+                new ButtonBuilder()
+                    .setStyle(ButtonStyle.Secondary)
                     .setURL('https://letrefle.org')
                     .setLabel('Consulter notre site'),
 
-                new MessageButton()
-                    .setStyle('SECONDARY')
+                new ButtonBuilder()
+                    .setStyle(ButtonStyle.Secondary)
                     .setURL('https://discord.gg/letrefle')
                     .setLabel('Rejoindre notre serveur discord')
             );
@@ -113,10 +113,10 @@ module.exports = async (Client, message) => {
     if (ticket) {
         let user = await Client.users.fetch(ticket.ownerID);
         if (user) {
-            let embed = new MessageEmbed()
-                .setAuthor('Bénévole écoutant', 'https://cdn.discordapp.com/attachments/757897064754708560/883734125985529866/default-profile-picture-clipart-3.jpg')
+            let embed = new EmbedBuilder()
+                .setAuthor({ name: 'Bénévole écoutant', iconURL: 'https://cdn.discordapp.com/attachments/757897064754708560/883734125985529866/default-profile-picture-clipart-3.jpg'})
                 .setDescription(message.content)
-                .setFooter(`Écoute ID : ${ticket.ticketID}`)
+                .setFooter({ text: `Écoute ID : ${ticket.ticketID}` })
                 .setColor('9bd2d2')
                 .setTimestamp();
 

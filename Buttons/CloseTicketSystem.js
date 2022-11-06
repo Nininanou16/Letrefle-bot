@@ -1,59 +1,59 @@
-const {MessageActionRow, MessageButton, MessageEmbed} = require('discord.js');
+const {ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle} = require('discord.js');
 const moment = require('moment');
 
 module.exports = async (Client, interaction) => {
     if (interaction) {
-        let topRow = new MessageActionRow()
+        let topRow = new ActionRowBuilder()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId('SelectorLeft')
-                    .setStyle('PRIMARY')
+                    .setStyle(ButtonStyle.Primary)
                     .setEmoji('◀️'),
 
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId('IncreaseData')
-                    .setStyle('PRIMARY')
+                    .setStyle(ButtonStyle.Primary)
                     .setEmoji('🔼'),
 
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId('SelectorRight')
-                    .setStyle('PRIMARY')
+                    .setStyle(ButtonStyle.Primary)
                     .setEmoji('▶️'),
 
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId('ConfirmDate')
                     .setEmoji('✅')
-                    .setStyle('SUCCESS'),
+                    .setStyle(ButtonStyle.Success),
 
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId('NoPlanning')
                     .setLabel('Ne pas planifier')
-                    .setStyle('SECONDARY')
+                    .setStyle(ButtonStyle.Secondary)
             );
 
-        let bottomRow = new MessageActionRow()
+        let bottomRow = new ActionRowBuilder()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId('Nothing1')
                     .setLabel(' ')
-                    .setStyle('PRIMARY')
+                    .setStyle(ButtonStyle.Primary)
                     .setDisabled(true),
 
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId('DecreaseData')
-                    .setStyle('PRIMARY')
+                    .setStyle(ButtonStyle.Primary)
                     .setEmoji('🔽'),
 
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId('Nothing2')
                     .setLabel(' ')
-                    .setStyle('PRIMARY')
+                    .setStyle(ButtonStyle.Primary)
                     .setDisabled(true),
 
-                new MessageButton()
+                new ButtonBuilder()
                     .setEmoji('❌')
                     .setCustomId('Cancel')
-                    .setStyle('DANGER')
+                    .setStyle(ButtonStyle.Danger)
             );
 
         let fullDate = moment(new Date()).format('DD/MM/YYYY');
@@ -105,7 +105,7 @@ module.exports = async (Client, interaction) => {
 
         await interaction.reply({
             embeds: [
-                new MessageEmbed()
+                new EmbedBuilder()
                     .setColor('9bd2d2')
                     .setDescription(`
                     🍀 | Quelle est la date de la prochaine permanence ?

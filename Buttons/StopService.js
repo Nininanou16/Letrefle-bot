@@ -1,4 +1,4 @@
-const {MessageEmbed} = require('discord.js');
+const {EmbedBuilder} = require('discord.js');
 
 module.exports = async (Client, interaction) => {
     let user = interaction.user;
@@ -9,7 +9,7 @@ module.exports = async (Client, interaction) => {
 
         interaction.reply({
             embeds: [
-                new MessageEmbed()
+                new EmbedBuilder()
                     .setColor('9bd2d2')
                     .setDescription('🍀 | Vous n\'êtes plus disponible !')
             ], ephemeral: true
@@ -22,7 +22,7 @@ module.exports = async (Client, interaction) => {
                 let channel = await guild.channels.fetch(tickets[i].channelID);
                 if (channel) {
                     channel.permissionOverwrites.create(user, {
-                        VIEW_CHANNEL: false
+                        ViewChannel: false
                     });
                 }
             }
@@ -32,7 +32,7 @@ module.exports = async (Client, interaction) => {
     } else {
         interaction.reply({
             embeds: [
-                new MessageEmbed()
+                new EmbedBuilder()
                     .setColor('9bd2d2')
                     .setDescription('⚠️ | Vous n\'êtes actuellement pas disponible !')
             ], ephemeral: true

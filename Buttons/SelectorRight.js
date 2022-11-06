@@ -1,4 +1,4 @@
-const {MessageEmbed} = require('discord.js');
+const {EmbedBuilder} = require('discord.js');
 
 module.exports = async (Client, interaction) => {
     let toSelect;
@@ -16,7 +16,7 @@ module.exports = async (Client, interaction) => {
     let text = Client.dateSelector.genText();
     interaction.update({
         embeds: [
-            new MessageEmbed()
+            new EmbedBuilder()
                 .setColor('9bd2d2')
                 .setDescription(`
                         🍀 | Quelle est la date de la prochaine permanence ?

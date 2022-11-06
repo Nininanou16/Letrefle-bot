@@ -1,4 +1,4 @@
-const {MessageEmbed, MessageActionRow, MessageButton} = require('discord.js');
+const {EmbedBuilder, ActionRowBuilder, ButtonBuilder} = require('discord.js');
 
 module.exports = {
     description: 'Ajouter un nouveau bénévole à l\'écoute actuelle',
@@ -14,7 +14,7 @@ module.exports = {
         let user = interaction.options.getMember('bénévole');
         if (!user) return interaction.reply({
             embeds: [
-                new MessageEmbed()
+                new EmbedBuilder()
                     .setColor('db3226')
                     .setDescription(':x: | Merci de préciser un utilisateur à ajouter à l\'écoute !')
             ], ephemeral: true

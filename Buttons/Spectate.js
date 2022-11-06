@@ -1,4 +1,4 @@
-const {MessageEmbed} = require('discord.js');
+const {EmbedBuilder} = require('discord.js');
 
 module.exports = async (Client, interaction) => {
     let spec = await Client.spectators.findOne({ where: {userID: interaction.user.id}});
@@ -10,7 +10,7 @@ module.exports = async (Client, interaction) => {
 
         interaction.reply({
             embeds: [
-                new MessageEmbed()
+                new EmbedBuilder()
                     .setColor('9bd2d2')
                     .setDescription(':eyes: | Vous avez bien quitté le mode spectateur')
             ], ephemeral: true
@@ -25,7 +25,7 @@ module.exports = async (Client, interaction) => {
 
         interaction.reply({
             embeds: [
-                new MessageEmbed()
+                new EmbedBuilder()
                     .setColor('9bd2d2')
                     .setDescription(':eyes: | Vous avez bien rejoint la permanence en tant que spectateur')
             ], ephemeral: true
@@ -35,14 +35,14 @@ module.exports = async (Client, interaction) => {
     async function update(status) {
         let tickets = await Client.Ticket.findAll();
         for (let i in Object.keys(tickets)) {
-            if (!tickets[i].attributed !== interaction.user.id) {
+            if (tickets[i].attributed !== interaction.user.id) {
                 let guild = Client.guilds.cache.get(Client.settings.mainGuildID);
                 if (guild) {
                     let channel = await guild.channels.fetch(tickets[i].channelID);
                     if (channel) {
                         channel.permissionOverwrites.create(interaction.member, {
-                            VIEW_CHANNEL: status,
-                            SEND_MESSAGES: false,
+                            ViewChannel: status,
+                            SendMessages: false,
                         });
                     }
                 }

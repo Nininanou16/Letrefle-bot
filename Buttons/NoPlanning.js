@@ -1,26 +1,26 @@
-const {MessageEmbed, MessageButton, MessageActionRow} = require('discord.js');
+const {EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle} = require('discord.js');
 
 module.exports = async (Client, interaction) => {
     interaction.message.delete();
 
-    let closedRow = new MessageActionRow()
+    let closedRow = new ActionRowBuilder()
         .addComponents(
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId('OpenTicketSystem')
                 .setLabel('Commencer une permanence')
-                .setStyle('SUCCESS')
+                .setStyle(ButtonStyle.Success)
                 .setEmoji('🔓'),
 
-            new MessageButton()
+            new ButtonBuilder()
                 .setCustomId('CloseTicketSystem')
                 .setLabel('Fin de la permancence')
-                .setStyle('DANGER')
+                .setStyle(ButtonStyle.Danger)
                 .setEmoji('🔒')
                 .setDisabled(true)
         )
 
     Client.dashboard.message.edit({ embeds: [
-            new MessageEmbed()
+            new EmbedBuilder()
                 .setColor('9bd2d2')
                 .setDescription('🔒 | La permanence est actuellement fermée !')
         ], components: [closedRow], content: null});
@@ -33,7 +33,7 @@ module.exports = async (Client, interaction) => {
 
     interaction.reply({
         embeds: [
-            new MessageEmbed()
+            new EmbedBuilder()
                 .setColor('9bd2d2')
                 .setDescription('✅ | La permanence a bien été fermée !')
         ], ephemeral: true
@@ -47,7 +47,7 @@ module.exports = async (Client, interaction) => {
             if (message) {
                 message.edit({
                     embeds: [
-                        new MessageEmbed()
+                        new EmbedBuilder()
                             .setColor('9bd2d2')
                             .setDescription('🔒 | La permanence est actuellement fermée ! En cas de problème nous t\'invitons à te rendre dans <#718250345951658064>')
                     ],
@@ -59,7 +59,7 @@ module.exports = async (Client, interaction) => {
         let voiceChannel = await mainGuild.channels.fetch(Client.settings.voiceTicketChannelID);
         if (voiceChannel) {
             voiceChannel.permissionOverwrites.edit(mainGuild.id, {
-                VIEW_CHANNEL: false,
+                ViewChannel: false,
                 CONNECT: false,
             });
         }

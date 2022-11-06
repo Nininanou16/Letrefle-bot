@@ -1,4 +1,4 @@
-const {MessageEmbed, MessageAttachment} = require('discord.js');
+const {EmbedBuilder, AttachmentBuilder, ActionRowBuilder, ButtonStyle, ButtonBuilder} = require('discord.js');
 const {readFile, writeFile, unlink} = require('fs');
 const moment = require('moment');
 
@@ -20,19 +20,29 @@ module.exports = async (Client, interaction) => {
         if (mainGuild) {
             let ticketChannel = await mainGuild.channels.cache.get(ticket.channelID);
             if (ticketChannel) {
+
+                let row = new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                           .setCustomId('Transmission')
+                           .setStyle(ButtonStyle.Primary)
+                           .setLabel('Transmission')
+                           .setEmoji('📝')
+                    );
+        
                 ticketChannel.send({
                     embeds: [
-                        new MessageEmbed()
+                        new EmbedBuilder()
                             .setColor('9bd2d2')
-                            .setDescription(`🔒 | Ce salon d\'écoute a été fermé par ${(interaction.message.channel.type === 'DM') ? 'l\'utilisateur' : 'le bénévole écoutant'}, plus aucun message ne sera transmit. Il sera supprimé automatiquement sous 10 secondes.`)
-                    ]
-                })
+                            .setDescription('🔒 | Cette écoute est maintenant fermée. Pour réaliser la transmission, merci d\'utiliser le bouton ci-dessous.')
+                    ], components: [row]
+                });
 
                 let user = await Client.users.fetch(ticket.ownerID);
                 if (user) {
                     user.send({
                         embeds: [
-                            new MessageEmbed()
+                            new EmbedBuilder()
                                 .setColor('9bd2d2')
                                 .setDescription(`🍀 | Votre salon d\'écoute a été fermé${(interaction.message.channel.type === 'DM') ? '' : ' par le bénévole écoutant'}. En cas de besoin, n\'hésitez pas à en réouvrir un !`)
                         ]
@@ -40,7 +50,7 @@ module.exports = async (Client, interaction) => {
                 }
 
                 interaction.reply({ embeds: [
-                        new MessageEmbed()
+                        new EmbedBuilder()
                             .setColor('9bd2d2')
                             .setDescription('✅ | L\'écoute a bien été fermée !')
                     ], ephemeral: true});
@@ -130,7 +140,7 @@ module.exports = async (Client, interaction) => {
                         if (err) throw err;
                     });
 
-                    let fileAttachment = new MessageAttachment(`./tempSaves/transcript-${ticket.ticketID}.html`, `transcript-${ticket.ticketID}.html`);
+                    let fileAttachment = new AttachmentBuilder(`./tempSaves/transcript-${ticket.ticketID}.html`, { name: `transcript-${ticket.ticketID}.html`});
                     let mainGuild = Client.guilds.cache.get(Client.settings.mainGuildID);
                     if (mainGuild) {
                         let transcriptChannel = await mainGuild.channels.fetch(Client.settings.transcriptChannelID);
@@ -154,10 +164,6 @@ module.exports = async (Client, interaction) => {
                     } catch (e) {
                         if (e) throw e
                     }
-
-                    setTimeout(() => {
-                        ticketChannel.delete();
-                    }, 10000);
                 });
             }
         }

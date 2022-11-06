@@ -1,4 +1,4 @@
-const {MessageEmbed} = require('discord.js');
+const {EmbedBuilder} = require('discord.js');
 
 module.exports = async (Client, interaction) => {
     let user = interaction.user;
@@ -7,7 +7,7 @@ module.exports = async (Client, interaction) => {
     if (userDB) {
         interaction.reply({
             embeds: [
-                new MessageEmbed()
+                new EmbedBuilder()
                     .setColor('9bd2d2')
                     .setDescription('⚠️ | Vous êtes déja disponible !')
             ], ephemeral: true
@@ -16,7 +16,7 @@ module.exports = async (Client, interaction) => {
         await Client.available.create({ userID: user.id, occupied: false });
         interaction.reply({
             embeds: [
-                new MessageEmbed()
+                new EmbedBuilder()
                     .setColor('9bd2d2')
                     .setDescription('🍀 | Vous êtes bien disponible !')
             ], ephemeral: true

@@ -2,7 +2,7 @@
 const Discord = require('discord.js');
 const Sequelize = require('sequelize');
 const fs = require('fs');
-const Client = new Discord.Client({ intents: ['GUILDS', 'GUILD_MEMBERS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_TYPING', 'GUILD_MESSAGE_REACTIONS', 'GUILD_VOICE_STATES', 'DIRECT_MESSAGES', 'DIRECT_MESSAGE_TYPING', 'DIRECT_MESSAGE_REACTIONS'], partials: ['CHANNEL']});
+const Client = new Discord.Client({ intents: [Discord.GatewayIntentBits.Guilds, Discord.GatewayIntentBits.GuildMembers, Discord.GatewayIntentBits.GuildMessages, Discord.GatewayIntentBits.MessageContent, Discord.GatewayIntentBits.GuildMessageTyping, Discord.GatewayIntentBits.GuildMessageReactions, Discord.GatewayIntentBits.GuildVoiceStates, Discord.GatewayIntentBits.DirectMessages, Discord.GatewayIntentBits.DirectMessageTyping, Discord.GatewayIntentBits.DirectMessageReactions], partials: [Discord.Partials.CHANNEL]});
 
 // Declaring variables
 Client.settings = require('./settings.json');
@@ -19,7 +19,8 @@ Client.db = new Sequelize({
 Client.commands = new Discord.Collection();
 Client.buttons = new Discord.Collection();
 Client.menus = new Discord.Collection();
-
+Client.modals = new Discord.Collection();
+Client.contextMenus = new Discord.Collection();
 fs.readdir('./Events', (err, files) => {
     if (err) throw err
 
@@ -70,6 +71,33 @@ fs.readdir('./SelectMenus', (err, files) => {
             Client.menus.set(name, require(`./SelectMenus/${file}`));
         }
     })
+});
+
+fs.readdir('./Modals', (err, files) => {
+    if (err) throw err
+
+    files.forEach(file => {
+        if (file.endsWith('.js')) {
+            let name = file.split('.')[0];
+
+            Client.modals.set(name, require(`./Modals/${file}`));
+        }
+    })
+});
+
+fs.readdir('./ContextMenus', (err, files) => {
+    if (err) throw err
+
+    files.forEach(file => {
+        if (file.endsWith('.js')) {
+            let name = file.split('.')[0];
+
+            Client.menus.set(name, require(`./ContextMenus/${file}`));
+            let data = new Discord.ContextMenuCommandBuilder()
+                .setName(name)
+                .setType(Discord.ApplicationCommandType.Message);
+        }
+    });
 });
 
 Client.Report = Client.db.define('report', {
