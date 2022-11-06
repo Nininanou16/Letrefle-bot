@@ -32,5 +32,9 @@
   "toCloseEmojis": [],
   "toCloseMessageChannel": "",
   "referentRoleID": "",
-  "logsChannelID": ""
+  "logsChannelID": "",
+  "transmissions": {
+    "serverID": "",
+    "channelID": ""
+  }
 }
