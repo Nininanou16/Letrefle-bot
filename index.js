@@ -85,21 +85,6 @@ fs.readdir('./Modals', (err, files) => {
     })
 });
 
-fs.readdir('./ContextMenus', (err, files) => {
-    if (err) throw err
-
-    files.forEach(file => {
-        if (file.endsWith('.js')) {
-            let name = file.split('.')[0];
-
-            Client.menus.set(name, require(`./ContextMenus/${file}`));
-            let data = new Discord.ContextMenuCommandBuilder()
-                .setName(name)
-                .setType(Discord.ApplicationCommandType.Message);
-        }
-    });
-});
-
 Client.Report = Client.db.define('report', {
     userID: Sequelize.TEXT,
     reason: Sequelize.TEXT,

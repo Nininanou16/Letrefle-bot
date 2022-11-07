@@ -24,10 +24,4 @@ module.exports = async (Client, interaction) => {
 
         if (modal) modal(Client, interaction);
     }
-
-    if (interaction.isMessageContextMenuCommang()) {
-        let contextMenu = Client.contextMenus.get(interaction.commandName);
-
-        if (contextMenu) contextMenu(Client, interaction);
-    }
 }
