@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 const { EmbedBuilder } = require("discord.js");
+=======
+const { MessageEmbed } = require("discord.js");
+>>>>>>> master
 
 module.exports = async (Client, interaction) => {
   let closing = await Client.functions.updateChannels(Client, true);

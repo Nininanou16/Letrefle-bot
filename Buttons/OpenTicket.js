@@ -1,10 +1,18 @@
 const {
+<<<<<<< HEAD
   ActionRowBuilder,
   ButtonBuilder,
   EmbedBuilder,
   SelectMenuBuilder,
   PermissionFlagsBits,
   ButtonStyle,
+=======
+  MessageActionRow,
+  MessageButton,
+  MessageEmbed,
+  MessageSelectMenu,
+  Permissions,
+>>>>>>> master
 } = require("discord.js");
 
 module.exports = async (Client, interaction, Ticket) => {
@@ -39,8 +47,13 @@ module.exports = async (Client, interaction, Ticket) => {
   if (hasTicket) {
     interaction.reply({
       embeds: [
+<<<<<<< HEAD
         new EmbedBuilder()
           .setColor("cc0000")
+=======
+        new MessageEmbed()
+          .setColor("RED")
+>>>>>>> master
           .setDescription(
             "❌ | Il semblerait que vous ayez déja un salon d'écoute ouvert ! Veuillez le fermer avant d'en ouvrir un nouveau."
           ),
@@ -54,27 +67,46 @@ module.exports = async (Client, interaction, Ticket) => {
     // generate unique ID
     let id = await genID();
 
+<<<<<<< HEAD
     let row = new ActionRowBuilder().addComponents(
       new ButtonBuilder()
         .setCustomId("CloseTicket")
         .setLabel("Fermer l'écoute")
         .setEmoji("⚠")
         .setStyle(ButtonStyle.Danger)
+=======
+    let row = new MessageActionRow().addComponents(
+      new MessageButton()
+        .setCustomId("CloseTicket")
+        .setLabel("Fermer l'écoute")
+        .setEmoji("⚠")
+        .setStyle("DANGER")
+>>>>>>> master
     );
 
     try {
       // send DM confirmation
       await interaction.user.send({
         embeds: [
+<<<<<<< HEAD
           new EmbedBuilder()
+=======
+          new MessageEmbed()
+>>>>>>> master
             .setColor("9bd2d2")
             .setThumbnail("https://i.imgur.com/haHDKhq.png")
             .setDescription(
               "👋 | Bonsoir et bienvenue sur Le Trèfle 2.0\nTa demande d'écoute a bien été prise en compte. Un bénévole écoutant te répondra sous 20 minutes, passé ce délai, nous t'invitons à contacter un autre support d'écoute disponible dans <#718250345951658064>."
             )
+<<<<<<< HEAD
             .setFooter({
               text: `Pour toute réclamation, veuillez fournir l'identifiant unique : ${id}, correspondant à votre écoute.`,
             }),
+=======
+            .setFooter(
+              `Pour toute réclamation, veuillez fournir l'identifiant unique : ${id}, correspondant à votre écoute.`
+            ),
+>>>>>>> master
         ],
         components: [row],
       });
@@ -82,8 +114,13 @@ module.exports = async (Client, interaction, Ticket) => {
       if (e) {
         return interaction.reply({
           embeds: [
+<<<<<<< HEAD
             new EmbedBuilder()
               .setColor("cc0000")
+=======
+            new MessageEmbed()
+              .setColor("RED")
+>>>>>>> master
               .setDescription(
                 `
                         ⚠️ | Il semblerait que vos messages privés soient fermés.
@@ -93,6 +130,7 @@ module.exports = async (Client, interaction, Ticket) => {
                         
                        > 📱 | Sur mobile : affichez la liste des salons, puis tout en haut cliquez sur le nom du serveur, et une fois sur le menu activez l'option Autoriser les messages privés`
               )
+<<<<<<< HEAD
               .setFooter({
                 text: "Si le problème perciste, merci de contacter un membre de l'association.",
               }),
@@ -155,16 +193,92 @@ module.exports = async (Client, interaction, Ticket) => {
         options.push({
           label: member.nickname || user.username,
           value: i.userID,
+=======
+              .setFooter(
+                "Si le problème perciste, merci de contacter un membre de l'association."
+              ),
+          ],
+          ephemeral: true,
+>>>>>>> master
         });
       }
     }
 
+<<<<<<< HEAD
     let ticketMenuMessage = null;
+=======
+    let ticketChannel = await mainGuild.channels.create(id, {
+      topic: "Salon d'écoute | ID : " + id,
+      parent,
+      permissionOverwrites: [
+        {
+          id: mainGuild.id,
+          deny: [Permissions.FLAGS.VIEW_CHANNEL],
+        },
+      ],
+    });
+
+    ticketChannel.permissionOverwrites.create(mainGuild.roles.everyone, {
+      VIEW_CHANNEL: false,
+    });
+
+    await ticketChannel.permissionOverwrites.create(
+      ticketChannel.guild.roles.cache.get(Client.settings.referentRoleID),
+      {
+        VIEW_CHANNEL: true,
+      }
+    );
+
+    let ticket = await Client.Ticket.create({
+      ticketID: id,
+      ownerID: interaction.user.id,
+      channelID: ticketChannel.id,
+      attributed: null,
+    });
+
+    // try {
+    //     interaction.reply({ embeds: [
+    //             new MessageEmbed()
+    //                 .setColor('GREEN')
+    //                 .setDescription('✅ | Votre demande d\'écoute à bien été prise en compte, veuillez continuer par messages privés.')
+    //         ], ephemeral: true});
+    // } catch (e) {
+    //     Client.functions.error(e);
+    // }
+    // TODO: check if interaction can be replied
+
+    let available = await Client.available.findAll({
+      where: { occupied: false },
+    });
+    let options = [];
+
+    for (let i of Object.values(available)) {
+      let user = await Client.users.fetch(i.userID);
+      if (user) {
+        let username = user.username;
+        let mainGuild = await Client.guilds.fetch(Client.settings.mainGuildID);
+        if (mainGuild) {
+          let member = mainGuild.members.fetch(user.id);
+          if (member && member.nickname) {
+            username = member.nickname;
+          }
+        }
+        options.push({
+          label: username,
+          value: i.userID,
+        });
+      }
+    }
+>>>>>>> master
 
     if (options.length < 1) {
       interaction.user.send({
         embeds: [
+<<<<<<< HEAD
           new EmbedBuilder()
+=======
+          new MessageEmbed()
+>>>>>>> master
             .setColor("d36515")
             .setDescription(
               "Bonsoir, \n" +
@@ -177,9 +291,15 @@ module.exports = async (Client, interaction, Ticket) => {
         ],
       });
 
+<<<<<<< HEAD
       ticketMenuMessage = await ticketChannel.send({
         embeds: [
           new EmbedBuilder()
+=======
+      ticketChannel.send({
+        embeds: [
+          new MessageEmbed()
+>>>>>>> master
             .setColor("9bd2d2")
             .setDescription(
               ":warning: | Tous les bénévoles sont actuellement occupés. Merci d'utiliser la commande `/assigner` pour assigner un nouveau bénévole écoutant."
@@ -189,18 +309,30 @@ module.exports = async (Client, interaction, Ticket) => {
       });
       // TODO: complete the occupation & wait message
     } else {
+<<<<<<< HEAD
       let attributeRow = new ActionRowBuilder().addComponents(
         new SelectMenuBuilder()
+=======
+      let attributeRow = new MessageActionRow().addComponents(
+        new MessageSelectMenu()
+>>>>>>> master
           .setCustomId("addAvailable")
           .setPlaceholder("Ajouter un bénévole")
           .addOptions(options)
       );
 
       // send channel msg
+<<<<<<< HEAD
       ticketMenuMessage = await ticketChannel.send({
         content: `<@&${Client.settings.referentRoleID}>`,
         embeds: [
           new EmbedBuilder()
+=======
+      ticketChannel.send({
+        content: `<@&${Client.settings.referentRoleID}>`,
+        embeds: [
+          new MessageEmbed()
+>>>>>>> master
             .setColor("9bd2d2")
             .setDescription(
               "🍀 | Nouvelle demande d'écoute. Veuillez attribuer un bénévole écoutant."
@@ -209,8 +341,11 @@ module.exports = async (Client, interaction, Ticket) => {
         components: [attributeRow],
       });
     }
+<<<<<<< HEAD
 
     await ticketMenuMessage.pin();
     ticketChannel.bulkDelete(1);
+=======
+>>>>>>> master
   }
 };

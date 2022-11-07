@@ -18,6 +18,7 @@ module.exports = async (Client, interaction) => {
       command.run(Client, interaction);
     }
   }
+<<<<<<< HEAD
 
   if (interaction.isModalSubmit()) {
     let modal = Client.modals.get(interaction.customId);
@@ -30,4 +31,6 @@ module.exports = async (Client, interaction) => {
 
     if (contextMenu) contextMenu(Client, interaction);
   }
+=======
+>>>>>>> master
 };

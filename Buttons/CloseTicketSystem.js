@@ -1,13 +1,18 @@
+<<<<<<< HEAD
 const {
   ActionRowBuilder,
   ButtonBuilder,
   EmbedBuilder,
   ButtonStyle,
 } = require("discord.js");
+=======
+const { MessageActionRow, MessageButton, MessageEmbed } = require("discord.js");
+>>>>>>> master
 const moment = require("moment");
 
 module.exports = async (Client, interaction) => {
   if (interaction) {
+<<<<<<< HEAD
     let topRow = new ActionRowBuilder().addComponents(
       new ButtonBuilder()
         .setCustomId("SelectorLeft")
@@ -57,6 +62,57 @@ module.exports = async (Client, interaction) => {
         .setEmoji("❌")
         .setCustomId("Cancel")
         .setStyle(ButtonStyle.Danger)
+=======
+    let topRow = new MessageActionRow().addComponents(
+      new MessageButton()
+        .setCustomId("SelectorLeft")
+        .setStyle("PRIMARY")
+        .setEmoji("◀️"),
+
+      new MessageButton()
+        .setCustomId("IncreaseData")
+        .setStyle("PRIMARY")
+        .setEmoji("🔼"),
+
+      new MessageButton()
+        .setCustomId("SelectorRight")
+        .setStyle("PRIMARY")
+        .setEmoji("▶️"),
+
+      new MessageButton()
+        .setCustomId("ConfirmDate")
+        .setEmoji("✅")
+        .setStyle("SUCCESS"),
+
+      new MessageButton()
+        .setCustomId("NoPlanning")
+        .setLabel("Ne pas planifier")
+        .setStyle("SECONDARY")
+    );
+
+    let bottomRow = new MessageActionRow().addComponents(
+      new MessageButton()
+        .setCustomId("Nothing1")
+        .setLabel(" ")
+        .setStyle("PRIMARY")
+        .setDisabled(true),
+
+      new MessageButton()
+        .setCustomId("DecreaseData")
+        .setStyle("PRIMARY")
+        .setEmoji("🔽"),
+
+      new MessageButton()
+        .setCustomId("Nothing2")
+        .setLabel(" ")
+        .setStyle("PRIMARY")
+        .setDisabled(true),
+
+      new MessageButton()
+        .setEmoji("❌")
+        .setCustomId("Cancel")
+        .setStyle("DANGER")
+>>>>>>> master
     );
 
     let fullDate = moment(new Date()).format("DD/MM/YYYY");
@@ -129,7 +185,11 @@ module.exports = async (Client, interaction) => {
 
     await interaction.reply({
       embeds: [
+<<<<<<< HEAD
         new EmbedBuilder().setColor("9bd2d2").setDescription(`
+=======
+        new MessageEmbed().setColor("9bd2d2").setDescription(`
+>>>>>>> master
                     🍀 | Quelle est la date de la prochaine permanence ?
                     
                     ▶️ | ${Client.dateSelector.genText()}`),
