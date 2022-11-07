@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-const { EmbedBuilder } = require("discord.js");
-=======
 const { MessageEmbed } = require("discord.js");
->>>>>>> master
 const bcrypt = require("bcrypt");
 
 module.exports = async (Client, interaction) => {
@@ -12,11 +8,7 @@ module.exports = async (Client, interaction) => {
   if (!role)
     return interaction.reply({
       embeds: [
-<<<<<<< HEAD
-        new EmbedBuilder()
-=======
         new MessageEmbed()
->>>>>>> master
           .setColor("9bd2d2")
           .setDescription(
             ":warning: | Il est impossible de vérifier que vous disposez du role Référent Bénévole Écoutant. Merci de signaler cette erreur aux techniciens."
@@ -28,11 +20,7 @@ module.exports = async (Client, interaction) => {
   if (!interaction.member.roles.cache.has(Client.settings.referentRoleID))
     return interaction.reply({
       embeds: [
-<<<<<<< HEAD
-        new EmbedBuilder()
-=======
         new MessageEmbed()
->>>>>>> master
           .setColor("9bd2d2")
           .setDescription(
             ":x: | Seul les Référents Bénévoles Écoutants peuvent effectuer un signalement. Merci de prendre contact avec le référent en charge afin qu'il prenne les mesures nécessaires."
@@ -47,11 +35,7 @@ module.exports = async (Client, interaction) => {
   if (!ticket)
     return interaction.reply({
       embeds: [
-<<<<<<< HEAD
-        new EmbedBuilder()
-=======
         new MessageEmbed()
->>>>>>> master
           .setColor("9bd2d2")
           .setDescription(
             ":warning: | Il semblerait que ce salon ne soit pas un salon d'écoute. Merci d'utiliser la commande dans l'un d'entre eux."
@@ -64,11 +48,7 @@ module.exports = async (Client, interaction) => {
   if (!reason)
     return interaction.reply({
       embeds: [
-<<<<<<< HEAD
-        new EmbedBuilder()
-=======
         new MessageEmbed()
->>>>>>> master
           .setColor("9bd2d2")
           .setDescription(
             ":warning: | Il semblerait que la raison soit invalide. Merci de réessayer"
@@ -81,11 +61,7 @@ module.exports = async (Client, interaction) => {
     if (err)
       return interaction.reply({
         embeds: [
-<<<<<<< HEAD
-          new EmbedBuilder()
-=======
           new MessageEmbed()
->>>>>>> master
             .setColor("9bd2d2")
             .setDescription(
               ":warning: | Une erreur est survenue lors du chiffrement. Merci de signaler cette erreur aux techniciens."
@@ -102,11 +78,7 @@ module.exports = async (Client, interaction) => {
 
     interaction.reply({
       embeds: [
-<<<<<<< HEAD
-        new EmbedBuilder()
-=======
         new MessageEmbed()
->>>>>>> master
           .setColor("9bd2d2")
           .setDescription(
             `:white_check_mark: | La vigilance à bien été enregistrée pour la raison \`${reason}\``
