@@ -33,12 +33,5 @@
   "toCloseMessageChannel": "",
   "referentRoleID": "",
   "logsChannelID": "",
-<<<<<<< HEAD
-  "transmissions": {
-    "serverID": "",
-    "channelID": ""
-  }
-=======
   "memberRoleID": ""
->>>>>>> master
 }

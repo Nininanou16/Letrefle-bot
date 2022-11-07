@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-const { EmbedBuilder } = require("discord.js");
-=======
 const { MessageEmbed } = require("discord.js");
->>>>>>> master
 
 module.exports = async (Client, interaction) => {
   let months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -11,12 +7,9 @@ module.exports = async (Client, interaction) => {
     if (Client.dateSelector.data[data].selected) {
       let value = Client.dateSelector.data[data].value;
       let numValue = parseInt(value);
-<<<<<<< HEAD
-=======
       console.log(
         numValue >= months[parseInt(Client.dateSelector.data.month.value) - 1]
       );
->>>>>>> master
       let loopback = false;
       switch (data) {
         case "day":
@@ -64,11 +57,7 @@ module.exports = async (Client, interaction) => {
 
   interaction.update({
     embeds: [
-<<<<<<< HEAD
-      new EmbedBuilder().setColor("9bd2d2").setDescription(`
-=======
       new MessageEmbed().setColor("9bd2d2").setDescription(`
->>>>>>> master
                         🍀 | Quelle est la date de la prochaine permanence ?
                         
                         ▶️ | ${Client.dateSelector.genText()}`),

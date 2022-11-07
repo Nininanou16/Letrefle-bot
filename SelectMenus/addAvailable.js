@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require("discord.js");
-=======
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
->>>>>>> master
 const bcrypt = require("bcrypt");
 
 module.exports = async (Client, interaction) => {
@@ -10,11 +6,7 @@ module.exports = async (Client, interaction) => {
   if (!user)
     return interaction.reply({
       embed: [
-<<<<<<< HEAD
-        new EmbedBuilder()
-=======
         new MessageEmbed()
->>>>>>> master
           .setColor("9nd2d2")
           .setDescription(
             ":warning: | Cet utilisateur n'a pas été trouvé, merci de séléctionner quelqu'un d'autre."

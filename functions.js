@@ -1,31 +1,8 @@
-<<<<<<< HEAD
-const {
-  ActionRowBuilder,
-  ButtonBuilder,
-  EmbedBuilder,
-  ButtonStyle,
-} = require("discord.js");
-=======
 const { MessageActionRow, MessageButton, MessageEmbed } = require("discord.js");
->>>>>>> master
 const { post } = require("axios");
 
 module.exports = {
   open: async (client, interaction) => {
-<<<<<<< HEAD
-    let openRow = new ActionRowBuilder().addComponents(
-      new ButtonBuilder()
-        .setCustomId("OpenTicketSystem")
-        .setLabel("Commencer une permanence")
-        .setStyle(ButtonStyle.Success)
-        .setEmoji("🔓")
-        .setDisabled(true),
-
-      new ButtonBuilder()
-        .setCustomId("CloseTicketSystem")
-        .setLabel("Fin de la permancence")
-        .setStyle(ButtonStyle.Danger)
-=======
     let openRow = new MessageActionRow().addComponents(
       new MessageButton()
         .setCustomId("OpenTicketSystem")
@@ -38,17 +15,12 @@ module.exports = {
         .setCustomId("CloseTicketSystem")
         .setLabel("Fin de la permancence")
         .setStyle("DANGER")
->>>>>>> master
         .setEmoji("🔒")
     );
 
     client.dashboard.message.edit({
       embeds: [
-<<<<<<< HEAD
-        new EmbedBuilder()
-=======
         new MessageEmbed()
->>>>>>> master
           .setColor("9bd2d2")
           .setDescription("🔓 | La permanence est actuellement ouverte !"),
       ],
@@ -62,21 +34,12 @@ module.exports = {
 
     client.user.setActivity("la permanence ouverte !", { type: "WATCHING" });
 
-<<<<<<< HEAD
-    let row = new ActionRowBuilder().addComponents(
-      new ButtonBuilder()
-        .setCustomId("OpenTicket")
-        .setLabel("Ouvrir une écoute")
-        .setEmoji("👋")
-        .setStyle(ButtonStyle.Success)
-=======
     let row = new MessageActionRow().addComponents(
       new MessageButton()
         .setCustomId("OpenTicket")
         .setLabel("Ouvrir une écoute")
         .setEmoji("👋")
         .setStyle("SUCCESS")
->>>>>>> master
     );
 
     let mainGuild = await client.guilds.fetch(client.settings.mainGuildID);
@@ -91,11 +54,7 @@ module.exports = {
         if (message) {
           message.edit({
             embeds: [
-<<<<<<< HEAD
-              new EmbedBuilder()
-=======
               new MessageEmbed()
->>>>>>> master
                 .setColor("9bd2d2")
                 .setDescription(
                   "🔓 | La permanence est actuellement ouverte ! Ouvre un salon d'écoute avec le bouton ci-dessous."
@@ -112,11 +71,7 @@ module.exports = {
       if (announcementChannel) {
         announcementChannel.send({
           embeds: [
-<<<<<<< HEAD
-            new EmbedBuilder()
-=======
             new MessageEmbed()
->>>>>>> master
               .setDescription(`<#${client.settings.ticketOpening.channel}>`)
               .setImage("https://i.imgur.com/1ApEpoi.png")
               .setColor("9bd2d2"),
@@ -129,13 +84,8 @@ module.exports = {
       );
       if (voiceChannel) {
         voiceChannel.permissionOverwrites.edit(mainGuild.id, {
-<<<<<<< HEAD
-          ViewChannel: true,
-          Connect: true,
-=======
           VIEW_CHANNEL: true,
           CONNECT: true,
->>>>>>> master
         });
       }
     }
@@ -143,11 +93,7 @@ module.exports = {
     if (interaction) {
       interaction.reply({
         embeds: [
-<<<<<<< HEAD
-          new EmbedBuilder()
-=======
           new MessageEmbed()
->>>>>>> master
             .setColor("9bd2d2")
             .setDescription("✅ | La permanence a bien été ouverte !"),
         ],
@@ -166,19 +112,6 @@ module.exports = {
   },
 
   close: async (client, timestamp, interaction) => {
-<<<<<<< HEAD
-    let closedRow = new ActionRowBuilder().addComponents(
-      new ButtonBuilder()
-        .setCustomId("OpenTicketSystem")
-        .setLabel("Commencer une permanence")
-        .setStyle(ButtonStyle.Success)
-        .setEmoji("🔓"),
-
-      new ButtonBuilder()
-        .setCustomId("CloseTicketSystem")
-        .setLabel("Fin de la permancence")
-        .setStyle(ButtonStyle.Danger)
-=======
     let closedRow = new MessageActionRow().addComponents(
       new MessageButton()
         .setCustomId("OpenTicketSystem")
@@ -190,18 +123,13 @@ module.exports = {
         .setCustomId("CloseTicketSystem")
         .setLabel("Fin de la permancence")
         .setStyle("DANGER")
->>>>>>> master
         .setEmoji("🔒")
         .setDisabled(true)
     );
 
     client.dashboard.message.edit({
       embeds: [
-<<<<<<< HEAD
-        new EmbedBuilder()
-=======
         new MessageEmbed()
->>>>>>> master
           .setColor("9bd2d2")
           .setDescription("🔒 | La permanence est actuellement fermée !"),
       ],
@@ -229,11 +157,7 @@ module.exports = {
         if (message) {
           message.edit({
             embeds: [
-<<<<<<< HEAD
-              new EmbedBuilder().setColor("9bd2d2")
-=======
               new MessageEmbed().setColor("9bd2d2")
->>>>>>> master
                 .setDescription(`🔒 | La permanence est actuellement fermée ! La prochaine permanence aura lieu <t:${formatTimestamp}:R>
 
                             En cas de soucis urgent, n'hésite pas à te rendre dans <#718250345951658064>`),
@@ -248,11 +172,7 @@ module.exports = {
       );
       if (voiceChannel) {
         voiceChannel.permissionOverwrites.edit(mainGuild.id, {
-<<<<<<< HEAD
-          ViewChannel: false,
-=======
           VIEW_CHANNEL: false,
->>>>>>> master
           CONNECT: false,
         });
       }
@@ -272,11 +192,7 @@ module.exports = {
     if (interaction) {
       interaction.reply({
         embeds: [
-<<<<<<< HEAD
-          new EmbedBuilder()
-=======
           new MessageEmbed()
->>>>>>> master
             .setColor("9bd2d2")
             .setDescription("✅ | La permanence à bien été fermée !"),
         ],
@@ -314,28 +230,6 @@ module.exports = {
           }
           if (specTxt.length > 1) text += `\n${specTxt}`;
 
-<<<<<<< HEAD
-          let row = new ActionRowBuilder().addComponents(
-            new ButtonBuilder()
-              .setCustomId("StartService")
-              .setEmoji("👋")
-              .setLabel("Rejoindre la permanence")
-              .setStyle(ButtonStyle.Primary),
-
-            new ButtonBuilder()
-              .setCustomId("StopService")
-              .setLabel("Quitter la permanence")
-              .setStyle(ButtonStyle.Secondary),
-
-            new ButtonBuilder()
-              .setCustomId("Spectate")
-              .setLabel("Mode spectateur")
-              .setStyle(ButtonStyle.Secondary)
-          );
-          msg.edit({
-            embeds: [
-              new EmbedBuilder()
-=======
           let row = new MessageActionRow().addComponents(
             new MessageButton()
               .setCustomId("StartService")
@@ -356,7 +250,6 @@ module.exports = {
           msg.edit({
             embeds: [
               new MessageEmbed()
->>>>>>> master
                 .setColor("9bd2d2")
                 .setDescription(`Bénévoles disponibles :\n${text}`),
             ],
@@ -386,30 +279,17 @@ module.exports = {
               open: true,
             };
 
-<<<<<<< HEAD
-          let row = new ActionRowBuilder().addComponents(
-            new ButtonBuilder()
-              .setCustomId("OpenChannels")
-              .setStyle(ButtonStyle.Success)
-=======
           let row = new MessageActionRow().addComponents(
             new MessageButton()
               .setCustomId("OpenChannels")
               .setStyle("SUCCESS")
->>>>>>> master
               .setEmoji("🔓")
               .setLabel("Ouvrir les salons")
               .setDisabled(opened.open),
 
-<<<<<<< HEAD
-            new ButtonBuilder()
-              .setCustomId("CloseChannels")
-              .setStyle(ButtonStyle.Secondary)
-=======
             new MessageButton()
               .setCustomId("CloseChannels")
               .setStyle("SECONDARY")
->>>>>>> master
               .setEmoji("🔒")
               .setLabel("Fermer les salons")
               .setDisabled(!opened.open)
@@ -417,11 +297,7 @@ module.exports = {
 
           message.edit({
             embeds: [
-<<<<<<< HEAD
-              new EmbedBuilder()
-=======
               new MessageEmbed()
->>>>>>> master
                 .setColor("9bd2d2")
                 .setDescription(
                   opened.open ? "🔓 | Salons ouverts" : "🔒 | Salons fermés"
@@ -429,87 +305,6 @@ module.exports = {
             ],
             components: [row],
           });
-<<<<<<< HEAD
-        }
-      }
-    }
-  },
-
-  updateChannels: async (Client, open) => {
-    let guild = await Client.guilds.fetch(Client.settings.mainGuildID);
-    if (guild) {
-      let opened = await Client.open.findAll();
-
-      for (let i of opened) {
-        // if (i.open === open) return false;
-        await i.destroy();
-      }
-
-      await Client.open.create({
-        open: open,
-      });
-
-      for (let i of Object.keys(Client.settings.toClose)) {
-        let role = await guild.roles.fetch(i);
-        if (role) {
-          for (let id of Client.settings.toClose[i]) {
-            let channel = await guild.channels.fetch(id);
-            if (channel) {
-              switch (channel.type) {
-                case "GUILD_TEXT":
-                  channel.permissionOverwrites.edit(role, {
-                    SendMessages: open,
-                  });
-                  break;
-
-                case "GUILD_VOICE":
-                  channel.permissionOverwrites.edit(role, {
-                    CONNECT: open,
-                  });
-              }
-            }
-          }
-        }
-      }
-
-      let openEmbed = new EmbedBuilder()
-        .setColor("9bd2d2")
-        .setDescription(
-          "<:onn:895691557817180191>  __**Bonjour à toutes et à tous, les canaux vocaux et textuels sont ouvert**__.  <:onn:895691557817180191>\n" +
-            ":sunny: *Nous comptons sur vous pour avoir des échanges et des propos corrects.* :sunny:"
-        )
-        .setImage(
-          "https://cdn.discordapp.com/attachments/718248830428119121/895901124404584488/Le_petit_bonjour_du_matin.png"
-        );
-
-      let closeEmbed = new EmbedBuilder()
-        .setColor("9bd2d2")
-        .setDescription(
-          "__**<:off:895691615593705512>  Fermeture des canaux textuels et vocaux. <:off:895691615593705512>**\n" +
-            "*L'équipe vous souhaites une très belle nuit. A demain.*__\n" +
-            "--\n" +
-            ":last_quarter_moon_with_face:**__POURQUOI ON FERME LES CANAUX LA NUIT__** :\n *En tant qu'association reconnue d'action sociale, nous avons la responsabilité de ce qui se passe sur notre discord. Quand l'association sera plus développée, nous pourrons vous proposer des horaires un peu plus tardifs dans des canaux publics, mais il est aussi question de vous préserver au niveau sommeil. Oui, vous pouvez aller sur un autre serveur, mais nous nous devons de ne pas participer à cela.*:first_quarter_moon_with_face:\n" +
-            "\n" +
-            "PS: Si cette nuit tu ne vas pas bien n'hésites pas à te rendre ici : <#718250345951658064>"
-        )
-        .setImage(
-          "https://cdn.discordapp.com/attachments/718248830428119121/895777777905729577/Le_bonsoir-1.png"
-        );
-
-      let mainChannel = await guild.channels.fetch(
-        Client.settings.toCloseMessageChannel
-      );
-      if (mainChannel) {
-        let msg = await mainChannel.send({
-          embeds: [open ? openEmbed : closeEmbed],
-        });
-
-        if (!open) {
-          for (let i of Client.settings.toCloseEmojis) {
-            let emoji = await Client.emojis.cache.get(i);
-            if (emoji) {
-              msg.react(emoji);
-=======
         }
       }
     }
@@ -548,136 +343,11 @@ module.exports = {
                     CONNECT: open,
                   });
               }
->>>>>>> master
             }
           }
         }
       }
 
-<<<<<<< HEAD
-      Client.functions.updateChannelsMessage(Client);
-
-      return true;
-    } else return false;
-  },
-
-  assign: async (Client, userID, interaction) => {
-    let ticket = await Client.Ticket.findOne({
-      where: { channelID: interaction.channelId },
-    });
-    if (!ticket)
-      return interaction.reply({
-        embeds: [
-          new EmbedBuilder()
-            .setColor("9bd2d2")
-            .setDescription(
-              ":warning: | Cette commande n'est utilisable que dans un salon d'écoute"
-            ),
-        ],
-      });
-
-    let userDB = await Client.available.findOne({ where: { userID: userID } });
-    if (!userDB)
-      return interaction.reply({
-        embeds: [
-          new EmbedBuilder()
-            .setColor("9bd2d2")
-            .setDescription(
-              ":warning: | Cet utilisateur ne semble pas être dans la permanence."
-            ),
-        ],
-        ephemeral: true,
-      });
-
-    await userDB.update({
-      userID: userID,
-      occupied: true,
-    });
-
-    let oldUserDB = await Client.available.findOne({
-      where: { userID: ticket.attributed },
-    });
-    if (oldUserDB) {
-      oldUserDB.update({
-        userID: ticket.attributed,
-        occupied: false,
-      });
-    }
-
-    Client.functions.updateAvailable(Client);
-
-    let mainGuild = await Client.guilds.fetch(Client.settings.mainGuildID);
-    if (mainGuild) {
-      let channel = await mainGuild.channels.fetch(ticket.channelID);
-      if (channel) {
-        let newUser = await Client.users.fetch(userID);
-
-        if (!ticket.attributed) {
-          if (newUser) {
-            let spectators = await Client.spectators.findAll();
-            for (let i in Object.keys(spectators)) {
-              let user = await Client.users.fetch(spectators[i].userID);
-              if (user) {
-                channel.permissionOverwrites.create(user, {
-                  ViewChannel: true,
-                  SendMessages: false,
-                });
-              }
-            }
-
-            channel.permissionOverwrites.create(newUser, {
-              ViewChannel: true,
-              SendMessages: true,
-            });
-
-            let row = new ActionRowBuilder().addComponents(
-              new ButtonBuilder()
-                .setCustomId("CloseTicket")
-                .setLabel("Fermer l'écoute")
-                .setEmoji("⚠")
-                .setStyle(ButtonStyle.Danger),
-
-              new ButtonBuilder()
-                .setCustomId("ReportTicket")
-                .setLabel("Vigilance")
-                .setEmoji("🔴")
-                .setStyle(ButtonStyle.Secondary)
-                .setDisabled(true),
-
-              new ButtonBuilder()
-                .setCustomId("AnonyLift")
-                .setLabel("Levée d'identifiant")
-                .setEmoji("🆔")
-                .setStyle(ButtonStyle.Secondary)
-            );
-
-            // await channel.bulkDelete(99);
-            if (interaction.message) {
-              interaction.message.edit({
-                content: `<@${userID}>`,
-                embeds: [
-                  new EmbedBuilder()
-                    .setColor("9bd2d2")
-                    .setDescription(
-                      "💬 | Cette écoute est maintenant attribuée, tout message envoyé dans ce salon sera transmis à l'utilisateur."
-                    ),
-                ],
-                components: [row],
-              });
-            } else {
-              let messages = await interaction.channel.messages.fetchPinned();
-              if (messages) {
-                messages.first().edit({
-                  content: `<@${userID}>`,
-                  embeds: [
-                    new EmbedBuilder()
-                      .setColor("9bd2d2")
-                      .setDescription(
-                        "💬 | Cette écoute est maintenant attribuée, tout message envoyé dans ce salon sera transmis à l'utilisateur."
-                      ),
-                  ],
-                  components: [row],
-=======
       let openEmbed = new MessageEmbed()
         .setColor("9bd2d2")
         .setDescription(
@@ -786,74 +456,10 @@ module.exports = {
                 channel.permissionOverwrites.create(user, {
                   VIEW_CHANNEL: true,
                   SEND_MESSAGES: false,
->>>>>>> master
                 });
               }
             }
 
-<<<<<<< HEAD
-            interaction.reply({
-              content: "L'utilisateur est bien assigné !",
-              ephemeral: true,
-            });
-
-            await ticket.update({
-              ticketID: ticket.ticketID,
-              ownerID: ticket.ownerID,
-              channelID: ticket.channelID,
-              attributed: userID,
-            });
-          }
-        } else {
-          let oldUser = await Client.users.fetch(ticket.attributed);
-          let occupied = false;
-
-          await ticket.update({
-            ticketID: ticket.ticketID,
-            ownerID: ticket.ownerID,
-            channelID: ticket.channelID,
-            attributed: userID,
-          });
-
-          let tickets = await Client.Ticket.findAll();
-          for (let ticket of Object.values(tickets)) {
-            if (ticket.attributed === oldUser.id) {
-              occupied = true;
-            }
-          }
-
-          if (!occupied) {
-            let userDB = await Client.available.findOne({
-              where: { userID: oldUser.id },
-            });
-            if (userDB) {
-              await userDB.update({
-                userID: userDB.userID,
-                occupied: false,
-              });
-            }
-          }
-
-          channel.permissionOverwrites.delete(oldUser);
-          let spectate = await Client.spectators.findOne({
-            where: { userID: oldUser.id },
-          });
-          if (spectate) {
-            channel.permissionOverwrites.create(oldUser, {
-              ViewChannel: true,
-              SendMessages: false,
-            });
-          }
-          if (newUser) {
-            channel.permissionOverwrites.create(newUser, {
-              ViewChannel: true,
-              SendMessages: true,
-            });
-
-            interaction.reply({
-              embeds: [
-                new EmbedBuilder()
-=======
             channel.permissionOverwrites.create(newUser, {
               VIEW_CHANNEL: true,
               SEND_MESSAGES: true,
@@ -953,7 +559,6 @@ module.exports = {
             interaction.reply({
               embeds: [
                 new MessageEmbed()
->>>>>>> master
                   .setColor("9bd2d2")
                   .setDescription(
                     `:white_check_mark: | \`${interaction.user.tag}\` a ajouté \`${newUser.tag}\` à l'écoute.`
@@ -975,11 +580,7 @@ module.exports = {
     if (!ticket)
       return interaction.reply({
         embeds: [
-<<<<<<< HEAD
-          new EmbedBuilder()
-=======
           new MessageEmbed()
->>>>>>> master
             .setColor("9bd2d2")
             .setDescription(
               ":warning: | Cette commande n'est utilisable que dans un salon d'écoute"
@@ -991,11 +592,7 @@ module.exports = {
     if (!userDB)
       return interaction.reply({
         embeds: [
-<<<<<<< HEAD
-          new EmbedBuilder()
-=======
           new MessageEmbed()
->>>>>>> master
             .setColor("9bd2d2")
             .setDescription(
               ":warning: | Cet utilisateur ne semble pas être dans la permanence."
@@ -1020,11 +617,7 @@ module.exports = {
 
           interaction.reply({
             embeds: [
-<<<<<<< HEAD
-              new EmbedBuilder()
-=======
               new MessageEmbed()
->>>>>>> master
                 .setColor("9bd2d2")
                 .setDescription(
                   `:white_check_mark: | \`${interaction.user.tag}\` a désassigné ${user.tag} de l'écoute.`
@@ -1062,11 +655,7 @@ module.exports = {
       if (logsChannel) {
         logsChannel.send({
           embeds: [
-<<<<<<< HEAD
-            new EmbedBuilder()
-=======
             new MessageEmbed()
->>>>>>> master
               .setColor("9bd2d2")
               .setTitle(":warning: | Unhandled critical error :")
               .setDescription(error),
