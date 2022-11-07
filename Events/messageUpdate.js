@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+const { EmbedBuilder } = require("discord.js");
+=======
 const { MessageEmbed } = require("discord.js");
+>>>>>>> master
 
 module.exports = async (Client, oldMsg, newMsg) => {
   if (oldMsg.content !== newMsg.content) {
@@ -17,8 +21,11 @@ module.exports = async (Client, oldMsg, newMsg) => {
     }
 
     if (ticket) {
+<<<<<<< HEAD
+=======
       console.log("ticket");
       console.log(ticket.ownerID);
+>>>>>>> master
       if (newMsg.channel.type === "DM") {
         let mainGuild = await Client.guilds.fetch(Client.settings.mainGuildID);
         if (mainGuild) {
@@ -30,11 +37,20 @@ module.exports = async (Client, oldMsg, newMsg) => {
             if (msg) {
               msg.edit({
                 embeds: [
+<<<<<<< HEAD
+                  new EmbedBuilder()
+                    .setAuthor({
+                      name: "Utilisateur",
+                      iconURL:
+                        "https://cdn.discordapp.com/attachments/757897064754708560/883734125985529866/default-profile-picture-clipart-3.jpg",
+                    })
+=======
                   new MessageEmbed()
                     .setAuthor(
                       "Utilisateur",
                       "https://cdn.discordapp.com/attachments/757897064754708560/883734125985529866/default-profile-picture-clipart-3.jpg"
                     )
+>>>>>>> master
                     .setDescription(`${newMsg.content} *(modifié)*`)
                     .setTimestamp()
                     .setColor("9bd2d2"),
@@ -54,6 +70,16 @@ module.exports = async (Client, oldMsg, newMsg) => {
             if (msg) {
               msg.edit({
                 embeds: [
+<<<<<<< HEAD
+                  new EmbedBuilder()
+                    .setAuthor({
+                      name: "Bénévole écoutant",
+                      iconURL:
+                        "https://cdn.discordapp.com/attachments/757897064754708560/883734125985529866/default-profile-picture-clipart-3.jpg",
+                    })
+                    .setDescription(`${newMsg.content} *(modifié)*`)
+                    .setFooter({ text: `Écoute ID : ${ticket.ticketID}` })
+=======
                   new MessageEmbed()
                     .setAuthor(
                       "Bénévole écoutant",
@@ -61,6 +87,7 @@ module.exports = async (Client, oldMsg, newMsg) => {
                     )
                     .setDescription(`${newMsg.content} *(modifié)*`)
                     .setFooter(`Écoute ID : ${ticket.ticketID}`)
+>>>>>>> master
                     .setColor("9bd2d2")
                     .setTimestamp(),
                 ],

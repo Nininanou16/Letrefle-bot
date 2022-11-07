@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+const { EmbedBuilder } = require("discord.js");
+=======
 const { MessageEmbed } = require("discord.js");
+>>>>>>> master
 
 module.exports = async (Client, interaction) => {
   let role = await interaction.message.guild.roles.fetch(
@@ -7,7 +11,11 @@ module.exports = async (Client, interaction) => {
   if (!role)
     return interaction.reply({
       embeds: [
+<<<<<<< HEAD
+        new EmbedBuilder()
+=======
         new MessageEmbed()
+>>>>>>> master
           .setColor("9bd2d2")
           .setDescription(
             ":warning: | Il est impossible de vérifier que vous disposez du role Référent Bénévole Écoutant. Merci de signaler cette erreur aux techniciens."
@@ -19,7 +27,11 @@ module.exports = async (Client, interaction) => {
   if (!interaction.member.roles.cache.has(Client.settings.referentRoleID))
     return interaction.reply({
       embeds: [
+<<<<<<< HEAD
+        new EmbedBuilder()
+=======
         new MessageEmbed()
+>>>>>>> master
           .setColor("9bd2d2")
           .setDescription(
             ":x: | Seul les Référents Bénévoles Écoutants peuvent effectuer une levée d'identifiant. Merci de prendre contact avec le référent en charge afin qu'il effectue cette levée."
@@ -34,7 +46,11 @@ module.exports = async (Client, interaction) => {
   if (!ticket)
     return interaction.reply({
       embeds: [
+<<<<<<< HEAD
+        new EmbedBuilder()
+=======
         new MessageEmbed()
+>>>>>>> master
           .setColor("9bd2d2")
           .setDescription(
             ":warning: | Il semblerait que ce salon ne soit pas un salon d'écoute. Merci d'utiliser la commande dans l'un d'entre eux."
@@ -47,7 +63,11 @@ module.exports = async (Client, interaction) => {
   if (!user)
     return interaction.reply({
       embeds: [
+<<<<<<< HEAD
+        new EmbedBuilder()
+=======
         new MessageEmbed()
+>>>>>>> master
           .setColor("9bd2d2")
           .setDescription(
             `:warning: | Il semblerait que l'utilisateur de cette écoute ne soit pas accessible. Les informations avancées ne sont pas disponibles.\n\n**Identifiant :** \`${ticket.ownerID}\``
@@ -59,9 +79,15 @@ module.exports = async (Client, interaction) => {
   let member = await interaction.message.guild.members.fetch(user.id);
   interaction.reply({
     embeds: [
+<<<<<<< HEAD
+      new EmbedBuilder()
+        .setColor("9bd2d2")
+        .setAuthor({ name: user.tag })
+=======
       new MessageEmbed()
         .setColor("9bd2d2")
         .setAuthor(user.tag)
+>>>>>>> master
         .setThumbnail(user.avatarURL())
         .setDescription(
           `Identifiant : \`${user.id}\`\nCréation du compte : <t:${Math.round(

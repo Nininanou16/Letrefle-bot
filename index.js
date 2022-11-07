@@ -4,6 +4,20 @@ const Sequelize = require("sequelize");
 const fs = require("fs");
 const Client = new Discord.Client({
   intents: [
+<<<<<<< HEAD
+    Discord.GatewayIntentBits.Guilds,
+    Discord.GatewayIntentBits.GuildMembers,
+    Discord.GatewayIntentBits.GuildMessages,
+    Discord.GatewayIntentBits.MessageContent,
+    Discord.GatewayIntentBits.GuildMessageTyping,
+    Discord.GatewayIntentBits.GuildMessageReactions,
+    Discord.GatewayIntentBits.GuildVoiceStates,
+    Discord.GatewayIntentBits.DirectMessages,
+    Discord.GatewayIntentBits.DirectMessageTyping,
+    Discord.GatewayIntentBits.DirectMessageReactions,
+  ],
+  partials: [Discord.Partials.CHANNEL],
+=======
     "GUILDS",
     "GUILD_MEMBERS",
     "GUILD_MESSAGES",
@@ -15,6 +29,7 @@ const Client = new Discord.Client({
     "DIRECT_MESSAGE_REACTIONS",
   ],
   partials: ["CHANNEL"],
+>>>>>>> master
 });
 
 // Declaring variables
@@ -32,7 +47,8 @@ Client.db = new Sequelize({
 Client.commands = new Discord.Collection();
 Client.buttons = new Discord.Collection();
 Client.menus = new Discord.Collection();
-
+Client.modals = new Discord.Collection();
+Client.contextMenus = new Discord.Collection();
 fs.readdir("./Events", (err, files) => {
   if (err) throw err;
 
@@ -46,28 +62,44 @@ fs.readdir("./Events", (err, files) => {
   });
 });
 
+<<<<<<< HEAD
 fs.readdir("./Commands", (err, files) => {
+=======
+fs.readdir("./Events", (err, files) => {
+>>>>>>> master
   if (err) throw err;
 
   files.forEach((file) => {
     if (file.endsWith(".js")) {
+<<<<<<< HEAD
       let name = file.split(".")[0];
 
       let command = require(`./Commands/${file}`);
       command.name = name.toLowerCase();
 
       Client.commands.set(command.name, command);
+=======
+      let event = require(`./Events/${file}`);
+
+      let name = file.split(".")[0];
+      Client.on(name, event.bind(null, Client));
+>>>>>>> master
     }
   });
 });
 
+<<<<<<< HEAD
 fs.readdir("./Buttons", (err, files) => {
+=======
+fs.readdir("./Commands", (err, files) => {
+>>>>>>> master
   if (err) throw err;
 
   files.forEach((file) => {
     if (file.endsWith(".js")) {
       let name = file.split(".")[0];
 
+<<<<<<< HEAD
       Client.buttons.set(name, require(`./Buttons/${file}`));
     }
   });
@@ -81,6 +113,55 @@ fs.readdir("./SelectMenus", (err, files) => {
       let name = file.split(".")[0];
 
       Client.menus.set(name, require(`./SelectMenus/${file}`));
+=======
+      let command = require(`./Commands/${file}`);
+      command.name = name.toLowerCase();
+
+      Client.commands.set(command.name, command);
+>>>>>>> master
+    }
+  });
+});
+
+<<<<<<< HEAD
+fs.readdir("./Modals", (err, files) => {
+=======
+fs.readdir("./Buttons", (err, files) => {
+>>>>>>> master
+  if (err) throw err;
+
+  files.forEach((file) => {
+    if (file.endsWith(".js")) {
+      let name = file.split(".")[0];
+
+<<<<<<< HEAD
+      Client.modals.set(name, require(`./Modals/${file}`));
+=======
+      Client.buttons.set(name, require(`./Buttons/${file}`));
+>>>>>>> master
+    }
+  });
+});
+
+<<<<<<< HEAD
+fs.readdir("./ContextMenus", (err, files) => {
+=======
+fs.readdir("./SelectMenus", (err, files) => {
+>>>>>>> master
+  if (err) throw err;
+
+  files.forEach((file) => {
+    if (file.endsWith(".js")) {
+      let name = file.split(".")[0];
+
+<<<<<<< HEAD
+      Client.menus.set(name, require(`./ContextMenus/${file}`));
+      let data = new Discord.ContextMenuCommandBuilder()
+        .setName(name)
+        .setType(Discord.ApplicationCommandType.Message);
+=======
+      Client.menus.set(name, require(`./SelectMenus/${file}`));
+>>>>>>> master
     }
   });
 });

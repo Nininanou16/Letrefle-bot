@@ -1,8 +1,30 @@
+<<<<<<< HEAD
+const {
+  EmbedBuilder,
+  ButtonBuilder,
+  ActionRowBuilder,
+  ButtonStyle,
+} = require("discord.js");
+=======
 const { MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
+>>>>>>> master
 
 module.exports = async (Client, interaction) => {
   interaction.message.delete();
 
+<<<<<<< HEAD
+  let closedRow = new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
+      .setCustomId("OpenTicketSystem")
+      .setLabel("Commencer une permanence")
+      .setStyle(ButtonStyle.Success)
+      .setEmoji("🔓"),
+
+    new ButtonBuilder()
+      .setCustomId("CloseTicketSystem")
+      .setLabel("Fin de la permancence")
+      .setStyle(ButtonStyle.Danger)
+=======
   let closedRow = new MessageActionRow().addComponents(
     new MessageButton()
       .setCustomId("OpenTicketSystem")
@@ -14,13 +36,18 @@ module.exports = async (Client, interaction) => {
       .setCustomId("CloseTicketSystem")
       .setLabel("Fin de la permancence")
       .setStyle("DANGER")
+>>>>>>> master
       .setEmoji("🔒")
       .setDisabled(true)
   );
 
   Client.dashboard.message.edit({
     embeds: [
+<<<<<<< HEAD
+      new EmbedBuilder()
+=======
       new MessageEmbed()
+>>>>>>> master
         .setColor("9bd2d2")
         .setDescription("🔒 | La permanence est actuellement fermée !"),
     ],
@@ -36,7 +63,11 @@ module.exports = async (Client, interaction) => {
 
   interaction.reply({
     embeds: [
+<<<<<<< HEAD
+      new EmbedBuilder()
+=======
       new MessageEmbed()
+>>>>>>> master
         .setColor("9bd2d2")
         .setDescription("✅ | La permanence a bien été fermée !"),
     ],
@@ -55,7 +86,11 @@ module.exports = async (Client, interaction) => {
       if (message) {
         message.edit({
           embeds: [
+<<<<<<< HEAD
+            new EmbedBuilder()
+=======
             new MessageEmbed()
+>>>>>>> master
               .setColor("9bd2d2")
               .setDescription(
                 "🔒 | La permanence est actuellement fermée ! En cas de problème nous t'invitons à te rendre dans <#718250345951658064>"
@@ -71,7 +106,11 @@ module.exports = async (Client, interaction) => {
     );
     if (voiceChannel) {
       voiceChannel.permissionOverwrites.edit(mainGuild.id, {
+<<<<<<< HEAD
+        ViewChannel: false,
+=======
         VIEW_CHANNEL: false,
+>>>>>>> master
         CONNECT: false,
       });
     }

@@ -1,4 +1,13 @@
+<<<<<<< HEAD
+const {
+  EmbedBuilder,
+  ButtonBuilder,
+  ActionRowBuilder,
+  ButtonStyle,
+} = require("discord.js");
+=======
 const { MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
+>>>>>>> master
 const moment = require("moment");
 
 module.exports = async (Client, interaction) => {
@@ -17,7 +26,11 @@ module.exports = async (Client, interaction) => {
   if (currTimestamp > reopenTimestamp)
     return interaction.reply({
       embeds: [
+<<<<<<< HEAD
+        new EmbedBuilder()
+=======
         new MessageEmbed()
+>>>>>>> master
           .setColor("9bd2d2")
           .setDescription(
             ":warning: | La date indiquée est déja passée, veuillez la modifier."
@@ -30,6 +43,19 @@ module.exports = async (Client, interaction) => {
     Client.functions.open(Client);
   }, reopenTimestamp - currTimestamp);
 
+<<<<<<< HEAD
+  let closedRow = new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
+      .setCustomId("OpenTicketSystem")
+      .setLabel("Commencer une permanence")
+      .setStyle(ButtonStyle.Success)
+      .setEmoji("🔓"),
+
+    new ButtonBuilder()
+      .setCustomId("CloseTicketSystem")
+      .setLabel("Fin de la permancence")
+      .setStyle(ButtonStyle.Danger)
+=======
   let closedRow = new MessageActionRow().addComponents(
     new MessageButton()
       .setCustomId("OpenTicketSystem")
@@ -41,13 +67,18 @@ module.exports = async (Client, interaction) => {
       .setCustomId("CloseTicketSystem")
       .setLabel("Fin de la permancence")
       .setStyle("DANGER")
+>>>>>>> master
       .setEmoji("🔒")
       .setDisabled(true)
   );
 
   Client.dashboard.message.edit({
     embeds: [
+<<<<<<< HEAD
+      new EmbedBuilder()
+=======
       new MessageEmbed()
+>>>>>>> master
         .setColor("9bd2d2")
         .setDescription("🔒 | La permanence est actuellement fermée !"),
     ],
@@ -75,7 +106,11 @@ module.exports = async (Client, interaction) => {
       if (message) {
         message.edit({
           embeds: [
+<<<<<<< HEAD
+            new EmbedBuilder().setColor("9bd2d2")
+=======
             new MessageEmbed().setColor("9bd2d2")
+>>>>>>> master
               .setDescription(`🔒 | La permanence est actuellement fermée ! La prochaine permanence aura lieu <t:${formatTimestamp}:R>
 
                             En cas de soucis urgent, n'hésite pas a te rendre dans <#718250345951658064>`),
@@ -90,7 +125,11 @@ module.exports = async (Client, interaction) => {
     );
     if (voiceChannel) {
       voiceChannel.permissionOverwrites.edit(mainGuild.id, {
+<<<<<<< HEAD
+        ViewChannel: false,
+=======
         VIEW_CHANNEL: false,
+>>>>>>> master
         CONNECT: false,
       });
     }

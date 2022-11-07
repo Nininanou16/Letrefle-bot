@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+const { EmbedBuilder } = require("discord.js");
+=======
 const { MessageEmbed } = require("discord.js");
+>>>>>>> master
 
 module.exports = async (Client, oldState, newState) => {
   if (newState.channelId === Client.settings.voiceTicketChannelID) {
@@ -13,7 +17,11 @@ module.exports = async (Client, oldState, newState) => {
         permissionOverwrites: [
           {
             id: newState.member.guild.id,
+<<<<<<< HEAD
+            deny: ["ViewChannel"],
+=======
             deny: ["VIEW_CHANNEL"],
+>>>>>>> master
           },
           {
             id: newState.member.user.id,
@@ -28,7 +36,11 @@ module.exports = async (Client, oldState, newState) => {
         let attributed = Client.users.cache.get(ticket.attributed);
         if (attributed) {
           vc.permissionOverwrites.create(attributed, {
+<<<<<<< HEAD
+            ViewChannel: true,
+=======
             VIEW_CHANNEL: true,
+>>>>>>> master
             CONNECT: true,
           });
         }
@@ -38,7 +50,11 @@ module.exports = async (Client, oldState, newState) => {
         );
         if (referentRole) {
           vc.permissionOverwrites.create(referentRole, {
+<<<<<<< HEAD
+            ViewChannel: true,
+=======
             VIEW_CHANNEL: true,
+>>>>>>> master
             CONNECT: true,
           });
         }
@@ -47,7 +63,11 @@ module.exports = async (Client, oldState, newState) => {
       newState.disconnect();
       newState.member.user.send({
         embeds: [
+<<<<<<< HEAD
+          new EmbedBuilder()
+=======
           new MessageEmbed()
+>>>>>>> master
             .setColor("9bd2d2")
             .setDescription(
               `<:letrefle:881678451608788993> | Avant d'ouvrir une écoute vocale, merci d'ouvrir une écoute via le bouton ":wave: Ouvrir une écoute" dans le salon <#${Client.settings.ticketOpening.channel}>, et de demander au bénévole d'effectuer l'écoute de manière orale. Il se peut qu'une écoute orale soit impossible pour certaines conditions techniques.\n\n:warning: Les écoutes vocales ne peuvent, pour des raisons techniques, pas actuellement être proposée de manière anonyme.`

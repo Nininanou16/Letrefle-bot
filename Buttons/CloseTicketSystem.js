@@ -1,8 +1,68 @@
+<<<<<<< HEAD
+const {
+  ActionRowBuilder,
+  ButtonBuilder,
+  EmbedBuilder,
+  ButtonStyle,
+} = require("discord.js");
+=======
 const { MessageActionRow, MessageButton, MessageEmbed } = require("discord.js");
+>>>>>>> master
 const moment = require("moment");
 
 module.exports = async (Client, interaction) => {
   if (interaction) {
+<<<<<<< HEAD
+    let topRow = new ActionRowBuilder().addComponents(
+      new ButtonBuilder()
+        .setCustomId("SelectorLeft")
+        .setStyle(ButtonStyle.Primary)
+        .setEmoji("◀️"),
+
+      new ButtonBuilder()
+        .setCustomId("IncreaseData")
+        .setStyle(ButtonStyle.Primary)
+        .setEmoji("🔼"),
+
+      new ButtonBuilder()
+        .setCustomId("SelectorRight")
+        .setStyle(ButtonStyle.Primary)
+        .setEmoji("▶️"),
+
+      new ButtonBuilder()
+        .setCustomId("ConfirmDate")
+        .setEmoji("✅")
+        .setStyle(ButtonStyle.Success),
+
+      new ButtonBuilder()
+        .setCustomId("NoPlanning")
+        .setLabel("Ne pas planifier")
+        .setStyle(ButtonStyle.Secondary)
+    );
+
+    let bottomRow = new ActionRowBuilder().addComponents(
+      new ButtonBuilder()
+        .setCustomId("Nothing1")
+        .setLabel(" ")
+        .setStyle(ButtonStyle.Primary)
+        .setDisabled(true),
+
+      new ButtonBuilder()
+        .setCustomId("DecreaseData")
+        .setStyle(ButtonStyle.Primary)
+        .setEmoji("🔽"),
+
+      new ButtonBuilder()
+        .setCustomId("Nothing2")
+        .setLabel(" ")
+        .setStyle(ButtonStyle.Primary)
+        .setDisabled(true),
+
+      new ButtonBuilder()
+        .setEmoji("❌")
+        .setCustomId("Cancel")
+        .setStyle(ButtonStyle.Danger)
+=======
     let topRow = new MessageActionRow().addComponents(
       new MessageButton()
         .setCustomId("SelectorLeft")
@@ -52,6 +112,7 @@ module.exports = async (Client, interaction) => {
         .setEmoji("❌")
         .setCustomId("Cancel")
         .setStyle("DANGER")
+>>>>>>> master
     );
 
     let fullDate = moment(new Date()).format("DD/MM/YYYY");
@@ -124,7 +185,11 @@ module.exports = async (Client, interaction) => {
 
     await interaction.reply({
       embeds: [
+<<<<<<< HEAD
+        new EmbedBuilder().setColor("9bd2d2").setDescription(`
+=======
         new MessageEmbed().setColor("9bd2d2").setDescription(`
+>>>>>>> master
                     🍀 | Quelle est la date de la prochaine permanence ?
                     
                     ▶️ | ${Client.dateSelector.genText()}`),
